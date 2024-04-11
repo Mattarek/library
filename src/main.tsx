@@ -1,19 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import React from "react";
+import ReactDOM from "react-dom/client";
 
-import './index.css';
+import "./i18n.ts";
+import "./index.css";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./appPaths.tsx";
 
-const router = createBrowserRouter([
-    {
-        path: '',
-        element: <App />,
-    },
-]);
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-    <React.StrictMode>
-        <RouterProvider router={router}></RouterProvider>
-    </React.StrictMode>,
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
 );
