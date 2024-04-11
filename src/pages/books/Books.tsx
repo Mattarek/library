@@ -56,7 +56,6 @@ export const Books: React.FC = () => {
   }, [currentPage]);
 
   if (isLoading) return <div>Loading...</div>;
-  console.log(currentPage);
   return (
     <div>
       <Box>

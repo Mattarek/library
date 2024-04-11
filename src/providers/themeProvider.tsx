@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { ThemeContext } from "../context/ThemeContext";
 
-export const ThemeProvider: React.FC = ({ children }): JSX.Element => {
+interface Props {
+  children: ReactNode;
+}
+
+export const ThemeProvider = ({ children }: Props): JSX.Element => {
   const [theme, setTheme] = useState<"light" | "dark">(
     (localStorage.getItem("ui.theme") as "light" | "dark") || "dark"
   );

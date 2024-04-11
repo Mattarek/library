@@ -17,7 +17,6 @@ export const Page = () => {
   };
 
   useEffect(() => {
-    // Ustawia szerokość menu na początku na 10%
     setMenuWidth("10%");
   }, []);
 
