@@ -16,11 +16,6 @@ interface Book {
 const BooksPage = () => {
   const baseUrl = `https://demo.api-platform.com/books`;
   const { allPagesData, isLoading, error } = useApiAllPages(baseUrl);
-  const [sorted, setSorted] = useState([{ field: "rating", sort: "desc" }]);
-
-  const handleSortModelChange = (newModel) => {
-    setSorted(newModel);
-  };
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 100 },
