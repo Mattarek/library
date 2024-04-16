@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
-import BooksPage from "./pages/books/Books";
+import { Popular } from "./pages/popular/Popular";
+import { Books } from "./pages/books/Books";
 
 export const router = createBrowserRouter([
   {
@@ -8,6 +9,10 @@ export const router = createBrowserRouter([
   },
   {
     path: "/books",
-    element: <BooksPage />,
+    element: <Books />,
+  },
+  {
+    path: "/popular",
+    element: <Popular />,
   },
 ]);
