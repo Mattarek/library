@@ -6,12 +6,13 @@ import { AuthContext, IAuthContext } from "react-oauth2-code-pkce";
 export const Books = () => {
   const [books, setBooks] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
+  const [itemPerSite, setItemPerSite] = useState(25);
   const [page, setPage] = useState(1);
   const { token } = useContext<IAuthContext>(AuthContext);
   const fetchBooks = async () => {
     try {
       const response = await axios.get(
-        `https://demo.api-platform.com/admin/books?page=${page}`,
+        `https://demo.api-platform.com/admin/books?page=${page}&itemsPerPage=${itemPerSite}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -43,17 +44,17 @@ export const Books = () => {
   ];
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
-      <DataGrid
-        rows={books}
-        columns={columns}
-        paginationMode="server"
-        pageSize={10}
-        rowCount={totalItems}
-        pagination
-        page={page - 1} // DataGrid page starts from 0
-        onPageChange={handlePageChange}
-      />
-    </div>
+    <DataGrid
+      rows={books}
+      columns={columns}
+      paginationMode="server"
+      rowCount={totalItems}
+      pagination
+      autoHeight
+      initialState={{
+        pagination: { paginationModel: { pageSize: 8 } },
+      }}
+      pageSizeOptions={[8, 12, 24]}
+    />
   );
 };
