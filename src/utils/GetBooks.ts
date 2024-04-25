@@ -6,7 +6,7 @@ export const useApiAllPages = (baseUrl: string) => {
   const [data, setData] = useState<[] | string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { token, tokenData } = useContext<IAuthContext>(AuthContext);
+  const { token } = useContext<IAuthContext>(AuthContext);
 
   useEffect(() => {
     const fetchData = async () => {

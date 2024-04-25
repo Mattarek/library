@@ -1,52 +1,59 @@
-import React, { useContext, useState } from "react";
+import { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import { DataGrid } from "@mui/x-data-grid";
+import { AuthContext, IAuthContext } from "react-oauth2-code-pkce";
 
-import { useApiAllPages } from "../../utils/GetBooks";
-import { IAuthContext, AuthContext } from "react-oauth2-code-pkce";
+export const Books = () => {
+  const [books, setBooks] = useState([]);
+  const [totalItems, setTotalItems] = useState(0);
+  const [page, setPage] = useState(1);
+  const { token } = useContext<IAuthContext>(AuthContext);
+  const fetchBooks = async () => {
+    try {
+      const response = await axios.get(
+        `https://demo.api-platform.com/admin/books?page=${page}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setBooks(
+        response.data["hydra:member"].map((book, index) => ({
+          ...book,
+          id: index + 1,
+        }))
+      );
+      setTotalItems(response.data["hydra:totalItems"]);
+    } catch (error) {
+      console.error("Error fetching books:", error);
+    }
+  };
 
-interface Book {
-  id: number;
-  title: string;
-  description: string;
-}
+  useEffect(() => {
+    fetchBooks();
+  }, [page]); // Fetch books whenever page changes
 
-const UserInfo = (): JSX.Element => {
-  const { token, tokenData } = useContext<IAuthContext>(AuthContext);
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
+
+  const columns = [
+    { field: "id", headerName: "ID", width: 150 },
+    { field: "title", headerName: "Title", width: 250 },
+    { field: "author", headerName: "Author", width: 200 },
+  ];
 
   return (
-    <>
-      <h4>Access Token</h4>
-      <pre>{token}</pre>
-      <h4>User Information from JWT</h4>
-      <pre>{JSON.stringify(tokenData, null, 2)}</pre>
-    </>
-  );
-};
-
-export const Books: React.FC = () => {
-  const [books, setBooks] = useState<Book[]>([]);
-
-  const responseData = useApiAllPages(
-    "https://demo.api-platform.com/admin/books?page=1&itemsPerPage=10"
-  );
-
-  console.log(responseData);
-  return (
-    <div>
-      {books !== null && (
-        <div>
-          {/* Wyświetlenie pobranych danych */}
-          <h2>Lista książek:</h2>
-          <ul>
-            {books.map((book) => (
-              <li key={book.id}>
-                <h3>{book.title}</h3>
-                <p>{book.description}</p>
-              </li>
-            ))}
-          </ul>
-          <UserInfo />
-        </div>
-      )}
+    <div style={{ height: 400, width: "100%" }}>
+      <DataGrid
+        rows={books}
+        columns={columns}
+        paginationMode="server"
+        pageSize={10}
+        rowCount={totalItems}
+        pagination
+        page={page - 1} // DataGrid page starts from 0
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };
