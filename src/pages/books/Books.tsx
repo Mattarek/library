@@ -1,8 +1,7 @@
 import { AppBar, Box, Container, Toolbar, Typography } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import { useContext, useEffect, useState } from "react";
-import axios from "axios"; // Dodajemy import axios
-import { AuthContext, IAuthContext } from "react-oauth2-code-pkce";
+import { DataGrid } from "../../components/dataGrid/DataGrid";
+import { useEffect, useState } from "react";
+import { useFetch } from "../../utils/useFetch";
 
 const columns = [
   {
@@ -13,12 +12,31 @@ const columns = [
   {
     field: "body",
     headerName: "Body",
-    flex: 1,
+    width: 200,
   },
 ];
+interface Data {
+  "@id": string;
+  "@type": string[];
+  author: string;
+  book: string;
+  condition: string;
+  id: number;
+  rating: number;
+  title: string;
+}
+
+interface PrevState {
+  data: [] | Data[];
+  isLoading: boolean;
+  lastPage: number;
+  page: number;
+  pageSize: number;
+  total: number;
+}
 
 export const Books = () => {
-  const [pageState, setPageState] = useState({
+  const [pageState, setPageState] = useState<PrevState>({
     isLoading: false,
     data: [],
     total: 0,
@@ -27,39 +45,27 @@ export const Books = () => {
     pageSize: 5,
   });
 
-  const { token } = useContext<IAuthContext>(AuthContext);
+  const { data: fetchedData, isLoading } = useFetch(
+    `https://demo.api-platform.com/admin/books`,
+    `?page=${pageState.page}&itemsPerPage=${pageState.pageSize}`
+  );
 
   useEffect(() => {
-    const fetchData = async () => {
-      setPageState((old) => ({ ...old, isLoading: true }));
-      try {
-        const response = await axios.get(
-          `https://demo.api-platform.com/admin/books?page=${pageState.page}&itemsPerPage=${pageState.pageSize}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+    if (fetchedData && fetchedData["hydra:member"]) {
+      const modifiedData = fetchedData["hydra:member"].map((item) => {
+        return {
+          id: item["@id"], // Zmiana '@id' na 'id'
+          ...item,
+        };
+      });
 
-        setPageState((old) => ({
-          ...old,
-          isLoading: false,
-          data: response.data["hydra:member"].map((book, index) => ({
-            ...book,
-            id: index + 1,
-          })),
-          total: response.data["hydra:totalItems"],
-          lastPage: parseInt(
-            response.data["hydra:view"]["hydra:last"].match(/page=(\d+)/)[1]
-          ),
-        }));
-      } catch (error) {
-        console.error("Error fetching books:", error);
-        setPageState((old) => ({ ...old, isLoading: false }));
-      }
-    };
-
-    fetchData();
-  }, [pageState.page, pageState.pageSize]);
+      setPageState((prevPageState) => ({
+        ...prevPageState,
+        total: fetchedData["hydra:totalItems"],
+        data: modifiedData,
+      }));
+    }
+  }, [fetchedData]);
 
   return (
     <Box>
@@ -72,27 +78,10 @@ export const Books = () => {
       </AppBar>
       <Container style={{ marginTop: 100, marginBottom: 100 }}>
         <DataGrid
-          autoHeight
-          paginationMode="server"
-          rows={pageState.data}
           columns={columns}
-          loading={pageState.isLoading}
-          rowCount={pageState.total}
-          pageSizeOptions={[5, 10, 25, 50, 100]}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 5,
-              },
-            },
-          }}
-          onPaginationModelChange={(newPage) => {
-            setPageState((old) => ({
-              ...old,
-              page: newPage.page + 1,
-              pageSize: newPage.pageSize,
-            }));
-          }}
+          data={pageState} // Użyj zmodyfikowanych danych
+          isLoading={isLoading}
+          setPageState={setPageState}
         />
       </Container>
     </Box>

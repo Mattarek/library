@@ -2,11 +2,11 @@ import { useState } from "react";
 import { Formik, Form, Field } from "formik";
 import { Button, TextField } from "@mui/material";
 import { DataGrid, GridRowsProp, GridColDef } from "@mui/x-data-grid";
-import useApiAllPages from "../../utils/GetBooks";
+import { useFetch } from "../../utils/useFetch";
 
 export const Popular = () => {
   const baseUrl = `https://demo.api-platform.com/books`;
-  const { allPagesData, isLoading, error } = useApiAllPages(baseUrl);
+  const { allPagesData, isLoading, error } = useFetch(baseUrl);
   const [filterValues, setFilterValues] = useState({
     title: "",
     author: "",
