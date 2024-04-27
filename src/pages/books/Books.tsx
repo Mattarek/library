@@ -28,8 +28,6 @@ interface Data {
 
 interface PrevState {
   data: [] | Data[];
-  isLoading: boolean;
-  lastPage: number;
   page: number;
   pageSize: number;
   total: number;
@@ -37,11 +35,9 @@ interface PrevState {
 
 export const Books = () => {
   const [pageState, setPageState] = useState<PrevState>({
-    isLoading: false,
     data: [],
     total: 0,
     page: 1,
-    lastPage: 0,
     pageSize: 5,
   });
 
@@ -51,10 +47,10 @@ export const Books = () => {
   );
 
   useEffect(() => {
-    if (fetchedData && fetchedData["hydra:member"]) {
+    if (fetchedData["hydra:member"]) {
       const modifiedData = fetchedData["hydra:member"].map((item) => {
         return {
-          id: item["@id"], // Zmiana '@id' na 'id'
+          id: item["@id"],
           ...item,
         };
       });
@@ -79,9 +75,19 @@ export const Books = () => {
       <Container style={{ marginTop: 100, marginBottom: 100 }}>
         <DataGrid
           columns={columns}
-          data={pageState} // Użyj zmodyfikowanych danych
+          pageState={pageState}
           isLoading={isLoading}
           setPageState={setPageState}
+          autoHeight
+          paginationMode="server"
+          pageSizeOptions={[5, 10, 25, 50]}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
+            },
+          }}
         />
       </Container>
     </Box>

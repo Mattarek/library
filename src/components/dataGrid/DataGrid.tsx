@@ -1,5 +1,5 @@
 import { DataGrid as DataGridMui } from "@mui/x-data-grid";
-import { useEffect, useState } from "react";
+import { ComponentProps, Dispatch } from "react";
 
 interface Data {
   "@id": string;
@@ -20,35 +20,41 @@ interface Column {
 
 interface PrevState {
   data: Data[];
-  isLoading: boolean;
-  lastPage: number;
   page: number;
   pageSize: number;
   total: number;
 }
 
-interface Props {
+interface Props extends ComponentProps<typeof DataGridMui> {
   columns: Column[];
+  isLoading: boolean;
+  pageState: {
+    data: Data[];
+    total: number;
+    page: number;
+    pageSize: number;
+  };
+  setPageState: (newPageState: {
+    data: Data[];
+    total: number;
+    page: number;
+    pageSize: number;
+  }) => void;
 }
 
-export function DataGrid({ columns, setPageState, isLoading, data, ...props }) {
-  console.log(data);
+export function DataGrid({
+  columns,
+  setPageState,
+  isLoading,
+  pageState,
+  ...props
+}: Readonly<Props>) {
   return (
     <DataGridMui
       columns={columns}
-      rows={data.data}
+      rows={pageState.data}
       loading={isLoading}
-      rowCount={data.total}
-      autoHeight
-      paginationMode="server"
-      pageSizeOptions={[5, 10, 25, 50]}
-      initialState={{
-        pagination: {
-          paginationModel: {
-            pageSize: 5,
-          },
-        },
-      }}
+      rowCount={pageState.total}
       onPaginationModelChange={(newPage) => {
         setPageState((prevState: PrevState) => ({
           ...prevState,

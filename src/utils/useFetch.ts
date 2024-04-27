@@ -21,9 +21,8 @@ export const useFetch = (baseUrl: string, params: string) => {
     } catch (error) {
       const err = error as AxiosError;
       console.log(err.response?.data);
-    } finally {
-      setIsLoading(false);
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
