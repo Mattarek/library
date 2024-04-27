@@ -1,151 +1,158 @@
-import { useState } from "react";
-import { Formik, Form, Field } from "formik";
-import { Button, TextField } from "@mui/material";
-import { DataGrid, GridRowsProp, GridColDef } from "@mui/x-data-grid";
+import { AppBar, Box, Container, Toolbar, Typography } from "@mui/material";
+import { DataGrid } from "../../components/dataGrid/DataGrid";
+import { useEffect, useState } from "react";
 import { useFetch } from "../../utils/useFetch";
+import EditIcon from "@mui/icons-material/Edit";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { Link } from "react-router-dom";
+import Rating from "@mui/material/Rating";
 
-export const Popular = () => {
-  const baseUrl = `https://demo.api-platform.com/books`;
-  const { allPagesData, isLoading, error } = useFetch(baseUrl);
-  const [filterValues, setFilterValues] = useState({
-    title: "",
-    author: "",
-    publicationDate: "",
+interface Data {
+  "@id": string;
+  "@type": string[];
+  author: string;
+  book: string;
+  condition: string;
+  id: number;
+  rating: number;
+  title: string;
+}
+
+interface PrevState {
+  data: [] | Data[];
+  isLoading: boolean;
+  page: number;
+  pageSize: number;
+  total: number;
+}
+
+const columns = [
+  {
+    headerName: "User",
+    field: "user",
+    valueGetter: (_, row) => row.user.name,
+    sortable: true,
+    width: 200,
+  },
+  {
+    headerName: "Book",
+    valueGetter: (_, row) => {
+      console.log(row);
+      return `${row.book.title} - ${row.book.author}`;
+    },
+    field: "book.author",
+    sortable: true,
+    width: 200,
+  },
+  {
+    headerName: "Published at",
+    valueGetter: (_, row) => `${row.publishedAt}`,
+    field: "publishedAt",
+    width: 200,
+    sortable: true,
+  },
+  {
+    headerName: "Rating",
+    renderCell: ({ row }: { row: Data }) => (
+      <Rating value={row.rating} readOnly />
+    ),
+    sortable: true,
+    field: "rating",
+    width: 200,
+  },
+  {
+    headerName: "View",
+    renderCell: ({ id }: { id: string }) => (
+      <Link to={id}>
+        <VisibilityIcon /> View
+      </Link>
+    ),
+    sortable: false,
+    field: "view",
+    width: 200,
+  },
+  {
+    headerName: "Edit",
+    renderCell: ({ id }: { id: string }) => (
+      <Link to={`${id}/edit`}>
+        <EditIcon /> Edit
+      </Link>
+    ),
+    sortable: false,
+    field: "edit",
+    width: 200,
+  },
+];
+
+export const Reviews = () => {
+  const [pageState, setPageState] = useState<PrevState>({
+    isLoading: false,
+    data: [],
+    total: 0,
+    page: 1,
+    pageSize: 5,
   });
 
-  const handleFilterSubmit = (values) => {
-    const trimmedValues = {};
-    for (const key in values) {
-      trimmedValues[key] = values[key].trim();
-    }
-    setFilterValues(trimmedValues);
-  };
-
-  const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 100 },
-    { field: "title", headerName: "Title", width: 250 },
-    { field: "author", headerName: "Author", width: 200 },
-    { field: "rating", headerName: "Rating", width: 150 },
-  ];
-
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-
-  const filteredRows: GridRowsProp = allPagesData.flatMap((pageData) =>
-    pageData["hydra:member"]
-      .filter((book) => {
-        if (
-          !filterValues.title ||
-          book.title.toLowerCase().includes(filterValues.title.toLowerCase())
-        ) {
-          if (
-            !filterValues.author ||
-            book.author
-              .toLowerCase()
-              .includes(filterValues.author.toLowerCase())
-          ) {
-            if (
-              !filterValues.publicationDate ||
-              book.publicationDate === filterValues.publicationDate
-            ) {
-              return true;
-            }
-          }
-        }
-        return false;
-      })
-      .map((book) => ({
-        id: book["@id"].split("/books/")[1].slice(0, -1),
-        title: book.title,
-        author: book.author,
-        publicationDate: book.publicationDate,
-        rating: book.rating,
-      }))
+  const { data: fetchedData, isLoading } = useFetch(
+    `https://demo.api-platform.com/admin/reviews`,
+    `?page=${pageState.page}&itemsPerPage=${pageState.pageSize}`
   );
 
-  console.log(filteredRows);
+  useEffect(() => {
+    if (fetchedData["hydra:member"]) {
+      const modifiedData = fetchedData["hydra:member"].map((item) => {
+        return {
+          id: item["@id"],
+          ...item,
+        };
+      });
+
+      setPageState((prevPageState) => ({
+        ...prevPageState,
+        total: fetchedData["hydra:totalItems"],
+        data: modifiedData,
+      }));
+    }
+  }, [fetchedData]);
+
+  console.log(pageState);
   return (
-    <>
-      <Formik
-        initialValues={{
-          title: "",
-          author: "",
-          publicationDate: "",
-        }}
-        onSubmit={(values, { setSubmitting }) => {
-          handleFilterSubmit(values);
-          setSubmitting(false);
-        }}
-      >
-        {({ isSubmitting }) => (
-          <Form
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "flex-end",
-            }}
-          >
-            <div style={{ marginRight: "10px" }}>
-              <Field
-                as={TextField}
-                name="title"
-                label="Title"
-                variant="outlined"
-                margin="normal"
-                fullWidth
-              />
-            </div>
-            <div style={{ marginRight: "10px" }}>
-              <Field
-                as={TextField}
-                name="author"
-                label="Author"
-                variant="outlined"
-                margin="normal"
-                fullWidth
-              />
-            </div>
-            <div style={{ marginRight: "10px" }}>
-              <Field
-                as={TextField}
-                name="publicationDate"
-                label="Publication Date"
-                type="date"
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                InputLabelProps={{ shrink: true }}
-              />
-            </div>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              disabled={isSubmitting}
-            >
-              Search
-            </Button>
-          </Form>
-        )}
-      </Formik>
-      <div style={{ height: 400, width: "100%" }}>
+    <Box>
+      <AppBar>
+        <Toolbar>
+          <Typography variant="h6" component="div">
+            Server-side Pagination demo
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Container style={{ marginTop: 100, marginBottom: 100 }}>
         <DataGrid
           autoHeight
-          rows={filteredRows}
+          paginationMode="server"
+          pageSizeOptions={[5, 10, 25, 50, 100]}
           columns={columns}
-          sortingOrder={["desc", "asc"]}
+          pageState={pageState}
+          isLoading={isLoading}
+          setPageState={setPageState}
           initialState={{
-            sorting: {
-              sortModel: [
-                {
-                  field: "rating",
-                  sort: "desc",
-                },
-              ],
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
             },
           }}
+          onPaginationModelChange={(newPage: {
+            page: number;
+            pageSize: number;
+          }) => {
+            setPageState((prevState) => ({
+              ...prevState,
+              page: newPage.page + 1,
+              pageSize: newPage.pageSize,
+            }));
+          }}
         />
-      </div>
-    </>
+      </Container>
+    </Box>
   );
 };

@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import { Popular } from "./pages/reviews/Reviews";
+import { Reviews } from "./pages/reviews/Reviews";
 import { Books } from "./pages/books/Books";
 
 export const router = createBrowserRouter([
@@ -12,7 +12,7 @@ export const router = createBrowserRouter([
     element: <Books />,
   },
   {
-    path: "/popular",
-    element: <Popular />,
+    path: "/reviews",
+    element: <Reviews />,
   },
 ]);
