@@ -29,7 +29,6 @@ interface Data {
 interface PrevState {
   data: [] | Data[];
   isLoading: boolean;
-  lastPage: number;
   page: number;
   pageSize: number;
   total: number;
@@ -41,7 +40,6 @@ export const Books = () => {
     data: [],
     total: 0,
     page: 1,
-    lastPage: 0,
     pageSize: 5,
   });
 
@@ -78,10 +76,27 @@ export const Books = () => {
       </AppBar>
       <Container style={{ marginTop: 100, marginBottom: 100 }}>
         <DataGrid
+          autoHeight
+          paginationMode="server"
+          pageSizeOptions={[5, 10, 25, 50]}
           columns={columns}
-          data={pageState} // Użyj zmodyfikowanych danych
+          pageState={pageState} // Użyj zmodyfikowanych danych
           isLoading={isLoading}
           setPageState={setPageState}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
+            },
+          }}
+          onPaginationModelChange={(newPage) => {
+            setPageState((prevState: PrevState) => ({
+              ...prevState,
+              page: newPage.page + 1,
+              pageSize: newPage.pageSize,
+            }));
+          }}
         />
       </Container>
     </Box>
