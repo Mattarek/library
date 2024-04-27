@@ -2,19 +2,11 @@ import { AppBar, Box, Container, Toolbar, Typography } from "@mui/material";
 import { DataGrid } from "../../components/dataGrid/DataGrid";
 import { useEffect, useState } from "react";
 import { useFetch } from "../../utils/useFetch";
+import EditIcon from "@mui/icons-material/Edit";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { Link } from "react-router-dom";
+import Rating from "@mui/material/Rating";
 
-const columns = [
-  {
-    field: "title",
-    headerName: "Title",
-    width: 200,
-  },
-  {
-    field: "body",
-    headerName: "Body",
-    width: 200,
-  },
-];
 interface Data {
   "@id": string;
   "@type": string[];
@@ -28,10 +20,58 @@ interface Data {
 
 interface PrevState {
   data: [] | Data[];
+  isLoading: boolean;
+  lastPage: number;
   page: number;
   pageSize: number;
   total: number;
 }
+
+const columns = [
+  {
+    headerName: "Title",
+    field: "title",
+    sortable: true,
+    width: 200,
+  },
+  {
+    headerName: "Author",
+    field: "author",
+    width: 200,
+    sortable: true,
+  },
+  {
+    headerName: "Rating",
+    renderCell: ({ row }: { row: Data }) => (
+      <Rating value={row.rating} readOnly />
+    ),
+    sortable: true,
+    field: "rating",
+    width: 200,
+  },
+  {
+    headerName: "View",
+    renderCell: ({ id }: { id: string }) => (
+      <Link to={id}>
+        <VisibilityIcon /> View
+      </Link>
+    ),
+    sortable: false,
+    field: "view",
+    width: 200,
+  },
+  {
+    headerName: "Edit",
+    renderCell: ({ id }: { id: string }) => (
+      <Link to={`${id}/edit`}>
+        <EditIcon /> Edit
+      </Link>
+    ),
+    sortable: false,
+    field: "edit",
+    width: 200,
+  },
+];
 
 export const Books = () => {
   const [pageState, setPageState] = useState<PrevState>({
@@ -50,7 +90,7 @@ export const Books = () => {
     if (fetchedData["hydra:member"]) {
       const modifiedData = fetchedData["hydra:member"].map((item) => {
         return {
-          id: item["@id"],
+          id: item["@id"], // Zmiana '@id' na 'id'
           ...item,
         };
       });
@@ -63,6 +103,7 @@ export const Books = () => {
     }
   }, [fetchedData]);
 
+  console.log(pageState);
   return (
     <Box>
       <AppBar>
@@ -74,13 +115,12 @@ export const Books = () => {
       </AppBar>
       <Container style={{ marginTop: 100, marginBottom: 100 }}>
         <DataGrid
+          autoHeight
+          paginationMode="server"
+          pageSizeOptions={[5, 10, 25, 50, 100]}
           columns={columns}
           pageState={pageState}
           isLoading={isLoading}
-          setPageState={setPageState}
-          autoHeight
-          paginationMode="server"
-          pageSizeOptions={[5, 10, 25, 50]}
           initialState={{
             pagination: {
               paginationModel: {
@@ -88,6 +128,7 @@ export const Books = () => {
               },
             },
           }}
+          setPageState={setPageState}
         />
       </Container>
     </Box>

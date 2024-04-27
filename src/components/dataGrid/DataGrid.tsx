@@ -11,7 +11,6 @@ interface Data {
   rating: number;
   title: string;
 }
-
 interface Column {
   field: string;
   headerName: string;
@@ -51,18 +50,11 @@ export function DataGrid({
 }: Readonly<Props>) {
   return (
     <DataGridMui
+      {...props}
       columns={columns}
       rows={pageState.data}
       loading={isLoading}
       rowCount={pageState.total}
-      onPaginationModelChange={(newPage) => {
-        setPageState((prevState: PrevState) => ({
-          ...prevState,
-          page: newPage.page + 1,
-          pageSize: newPage.pageSize,
-        }));
-      }}
-      {...props}
     />
   );
 }
