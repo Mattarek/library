@@ -2,16 +2,47 @@ import { AppBar, Box, Container, Toolbar, Typography } from "@mui/material";
 import { DataGrid } from "../../components/dataGrid/DataGrid";
 import { useEffect, useState } from "react";
 import { useFetch } from "../../utils/useFetch";
+import EditIcon from "@mui/icons-material/Edit";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { Link } from "react-router-dom";
+import Rating from "@mui/material/Rating";
 
 const columns = [
   {
-    field: "title",
     headerName: "Title",
+    field: "title",
+
     width: 200,
   },
   {
-    field: "body",
-    headerName: "Body",
+    headerName: "Author",
+    field: "author",
+    width: 200,
+  },
+  {
+    headerName: "Rating",
+    renderCell: ({ row }) => <Rating value={row.rating} readOnly />,
+    field: "rating",
+    width: 200,
+  },
+  {
+    headerName: "View",
+    renderCell: ({ id }: { id: string }) => (
+      <Link to={id}>
+        <VisibilityIcon /> View
+      </Link>
+    ),
+    field: "view",
+    width: 200,
+  },
+  {
+    headerName: "Edit",
+    renderCell: ({ id }: { id: string }) => (
+      <Link to={id}>
+        <EditIcon /> Edit
+      </Link>
+    ),
+    field: "edit",
     width: 200,
   },
 ];
@@ -52,7 +83,8 @@ export const Books = () => {
     if (fetchedData["hydra:member"]) {
       const modifiedData = fetchedData["hydra:member"].map((item) => {
         return {
-          id: item["@id"], // Zmiana '@id' na 'id'
+          id: item["@id"],
+          "@id": <EditIcon />,
           ...item,
         };
       });
@@ -81,9 +113,16 @@ export const Books = () => {
           paginationMode="server"
           pageSizeOptions={[5, 10, 25, 50, 100]}
           columns={columns}
-          pageState={pageState} // Użyj zmodyfikowanych danych
+          pageState={pageState}
           isLoading={isLoading}
           setPageState={setPageState}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
+            },
+          }}
           onPaginationModelChange={(newPage: {
             page: number;
             pageSize: number;
