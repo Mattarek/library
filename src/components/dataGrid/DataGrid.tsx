@@ -27,12 +27,7 @@ interface Props {
   columns: Column[];
 }
 
-export function DataGrid({
-  columns,
-  isLoading,
-  pageState,
-  ...props
-}: Readonly<Props>) {
+export function DataGrid({ columns, isLoading, pageState, ...props }: Props) {
   return (
     <DataGridMui
       {...props}

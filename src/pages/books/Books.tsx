@@ -49,7 +49,7 @@ export const Books = () => {
   );
 
   useEffect(() => {
-    if (fetchedData && fetchedData["hydra:member"]) {
+    if (fetchedData["hydra:member"]) {
       const modifiedData = fetchedData["hydra:member"].map((item) => {
         return {
           id: item["@id"], // Zmiana '@id' na 'id'
@@ -65,6 +65,7 @@ export const Books = () => {
     }
   }, [fetchedData]);
 
+  console.log(pageState);
   return (
     <Box>
       <AppBar>
@@ -78,20 +79,16 @@ export const Books = () => {
         <DataGrid
           autoHeight
           paginationMode="server"
-          pageSizeOptions={[5, 10, 25, 50]}
+          pageSizeOptions={[5, 10, 25, 50, 100]}
           columns={columns}
           pageState={pageState} // Użyj zmodyfikowanych danych
           isLoading={isLoading}
           setPageState={setPageState}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 5,
-              },
-            },
-          }}
-          onPaginationModelChange={(newPage) => {
-            setPageState((prevState: PrevState) => ({
+          onPaginationModelChange={(newPage: {
+            page: number;
+            pageSize: number;
+          }) => {
+            setPageState((prevState) => ({
               ...prevState,
               page: newPage.page + 1,
               pageSize: newPage.pageSize,
