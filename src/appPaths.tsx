@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import { Popular } from "./pages/popular/Popular";
+import { Popular } from "./pages/reviews/Reviews";
 import { Books } from "./pages/books/Books";
 
 export const router = createBrowserRouter([

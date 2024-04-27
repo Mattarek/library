@@ -7,45 +7,6 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Link } from "react-router-dom";
 import Rating from "@mui/material/Rating";
 
-const columns = [
-  {
-    headerName: "Title",
-    field: "title",
-
-    width: 200,
-  },
-  {
-    headerName: "Author",
-    field: "author",
-    width: 200,
-  },
-  {
-    headerName: "Rating",
-    renderCell: ({ row }) => <Rating value={row.rating} readOnly />,
-    field: "rating",
-    width: 200,
-  },
-  {
-    headerName: "View",
-    renderCell: ({ id }: { id: string }) => (
-      <Link to={id}>
-        <VisibilityIcon /> View
-      </Link>
-    ),
-    field: "view",
-    width: 200,
-  },
-  {
-    headerName: "Edit",
-    renderCell: ({ id }: { id: string }) => (
-      <Link to={id}>
-        <EditIcon /> Edit
-      </Link>
-    ),
-    field: "edit",
-    width: 200,
-  },
-];
 interface Data {
   "@id": string;
   "@type": string[];
@@ -64,6 +25,52 @@ interface PrevState {
   pageSize: number;
   total: number;
 }
+
+const columns = [
+  {
+    headerName: "Title",
+    field: "title",
+    sortable: true,
+    width: 200,
+  },
+  {
+    headerName: "Author",
+    field: "author",
+    width: 200,
+    sortable: true,
+  },
+  {
+    headerName: "Rating",
+    renderCell: ({ row }: { row: Data }) => (
+      <Rating value={row.rating} readOnly />
+    ),
+    sortable: true,
+    field: "rating",
+    width: 200,
+  },
+  {
+    headerName: "View",
+    renderCell: ({ id }: { id: string }) => (
+      <Link to={id}>
+        <VisibilityIcon /> View
+      </Link>
+    ),
+    sortable: false,
+    field: "view",
+    width: 200,
+  },
+  {
+    headerName: "Edit",
+    renderCell: ({ id }: { id: string }) => (
+      <Link to={`${id}/edit`}>
+        <EditIcon /> Edit
+      </Link>
+    ),
+    sortable: false,
+    field: "edit",
+    width: 200,
+  },
+];
 
 export const Books = () => {
   const [pageState, setPageState] = useState<PrevState>({
