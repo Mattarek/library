@@ -25,7 +25,7 @@ const columns = [
   },
   {
     headerName: "Rating",
-    renderCell: ({ row }: { row: Data }) => (
+    renderCell: ({ row }: { row: DataBooks }) => (
       <Rating value={row.rating} readOnly />
     ),
     sortable: true,
@@ -36,7 +36,7 @@ const columns = [
   {
     headerName: "View",
     renderCell: ({ id }: { id: string }) => (
-      <Link to={id}>
+      <Link to={`${id}/view`}>
         <VisibilityIcon /> View
       </Link>
     ),
