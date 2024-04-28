@@ -6,25 +6,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Link } from "react-router-dom";
 import Rating from "@mui/material/Rating";
-
-interface Data {
-  "@id": string;
-  "@type": string[];
-  author: string;
-  book: string;
-  condition: string;
-  id: number;
-  rating: number;
-  title: string;
-}
-
-interface PrevState {
-  data: [] | Data[];
-  isLoading: boolean;
-  page: number;
-  pageSize: number;
-  total: number;
-}
+import { DataBooks } from "../../types/types";
 
 const columns = [
   {
@@ -78,7 +60,13 @@ const columns = [
 ];
 
 export const Books = () => {
-  const [pageState, setPageState] = useState<PrevState>({
+  const [pageState, setPageState] = useState<{
+    isLoading: boolean;
+    data: DataBooks[];
+    total: number;
+    page: number;
+    pageSize: number;
+  }>({
     isLoading: false,
     data: [],
     total: 0,
@@ -86,26 +74,30 @@ export const Books = () => {
     pageSize: 5,
   });
 
-  const { data: fetchedData, isLoading } = useFetch(
+  const { response: fetchedData, isLoading } = useFetch(
     `https://demo.api-platform.com/admin/books`,
     `?page=${pageState.page}&itemsPerPage=${pageState.pageSize}`
   );
 
+  console.log(fetchedData);
   useEffect(() => {
-    if (fetchedData["hydra:member"]) {
+    if (fetchedData?.["hydra:member"]) {
       const modifiedData = fetchedData["hydra:member"].map((item) => {
         return {
+          ...item,
           id: item["@id"],
           "@id": <EditIcon />,
-          ...item,
         };
       });
 
-      setPageState((prevPageState) => ({
-        ...prevPageState,
-        total: fetchedData["hydra:totalItems"],
-        data: modifiedData,
-      }));
+      setPageState((prevPageState) => {
+        console.log(modifiedData);
+        return {
+          ...prevPageState,
+          total: fetchedData["hydra:totalItems"],
+          data: modifiedData,
+        };
+      });
     }
   }, [fetchedData]);
 

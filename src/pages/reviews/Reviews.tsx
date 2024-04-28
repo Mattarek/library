@@ -6,25 +6,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Link } from "react-router-dom";
 import Rating from "@mui/material/Rating";
-
-interface Data {
-  "@id": string;
-  "@type": string[];
-  author: string;
-  book: string;
-  condition: string;
-  id: number;
-  rating: number;
-  title: string;
-}
-
-interface PrevState {
-  data: [] | Data[];
-  isLoading: boolean;
-  page: number;
-  pageSize: number;
-  total: number;
-}
+import { State } from "../../types/types";
 
 const columns = [
   {
@@ -37,10 +19,7 @@ const columns = [
   },
   {
     headerName: "Book",
-    valueGetter: (_, row) => {
-      console.log(row);
-      return `${row.book.title} - ${row.book.author}`;
-    },
+    valueGetter: (_, row) => `${row.book.title} - ${row.book.author}`,
     field: "book.author",
     sortable: true,
     flex: 1,
@@ -91,7 +70,7 @@ const columns = [
 ];
 
 export const Reviews = () => {
-  const [pageState, setPageState] = useState<PrevState>({
+  const [pageState, setPageState] = useState<State>({
     isLoading: false,
     data: [],
     total: 0,
@@ -99,29 +78,31 @@ export const Reviews = () => {
     pageSize: 5,
   });
 
-  const { data: fetchedData, isLoading } = useFetch(
+  const { response: fetchedData, isLoading } = useFetch(
     `https://demo.api-platform.com/admin/reviews`,
     `?page=${pageState.page}&itemsPerPage=${pageState.pageSize}`
   );
 
   useEffect(() => {
-    if (fetchedData["hydra:member"]) {
+    if (fetchedData?.["hydra:member"]) {
       const modifiedData = fetchedData["hydra:member"].map((item) => {
         return {
-          id: item["@id"],
           ...item,
+          id: item["@id"],
+          "@id": <EditIcon />,
         };
       });
 
-      setPageState((prevPageState) => ({
-        ...prevPageState,
-        total: fetchedData["hydra:totalItems"],
-        data: modifiedData,
-      }));
+      setPageState((prevPageState) => {
+        return {
+          ...prevPageState,
+          total: fetchedData["hydra:totalItems"],
+          data: modifiedData,
+        };
+      });
     }
   }, [fetchedData]);
 
-  console.log(pageState);
   return (
     <Box>
       <AppBar>

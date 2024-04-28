@@ -1,10 +1,11 @@
 import { useState, useContext, useEffect } from "react";
 import axios, { AxiosError } from "axios";
 import { AuthContext, IAuthContext } from "react-oauth2-code-pkce";
+import { Response } from "../types/types";
 
 export const useFetch = (baseUrl: string, params: string) => {
   const { token } = useContext<IAuthContext>(AuthContext);
-  const [data, setData] = useState<[] | string[]>([]);
+  const [response, setResponse] = useState<Response>();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -17,7 +18,7 @@ export const useFetch = (baseUrl: string, params: string) => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (firstPageResponse.status === 200) setData(firstPageResponse.data);
+      if (firstPageResponse.status === 200) setResponse(firstPageResponse.data);
     } catch (error) {
       const err = error as AxiosError;
       console.log(err.response?.data);
@@ -30,5 +31,5 @@ export const useFetch = (baseUrl: string, params: string) => {
     fetchData();
   }, [baseUrl, params]);
 
-  return { data, isLoading, error };
+  return { response, isLoading, error };
 };

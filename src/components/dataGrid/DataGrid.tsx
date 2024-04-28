@@ -1,30 +1,16 @@
-import { DataGrid as DataGridMui } from "@mui/x-data-grid";
-interface Data {
-  "@id": string;
-  "@type": string[];
-  author: string;
-  book: string;
-  condition: string;
-  id: number;
-  rating: number;
-  title: string;
-}
-interface Column {
-  field: string;
-  headerName: string;
-  width: number;
-}
+import { DataGrid as DataGridMui, GridColDef } from "@mui/x-data-grid";
+import { DataBooks } from "../../types/types";
 
 interface Props {
   pageState: {
     isLoading: boolean;
-    data: Data[];
+    data: DataBooks[];
     total: number;
     page: number;
     pageSize: number;
   };
   isLoading: boolean;
-  columns: Column[];
+  columns: GridColDef<DataBooks>[];
 }
 
 export function DataGrid({ columns, isLoading, pageState, ...props }: Props) {
