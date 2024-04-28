@@ -31,12 +31,14 @@ const columns = [
     headerName: "Title",
     field: "title",
     sortable: true,
-    width: 200,
+    minWidth: 150,
+    flex: 1,
   },
   {
     headerName: "Author",
     field: "author",
-    width: 200,
+    minWidth: 150,
+    flex: 1,
     sortable: true,
   },
   {
@@ -46,7 +48,8 @@ const columns = [
     ),
     sortable: true,
     field: "rating",
-    width: 200,
+    minWidth: 150,
+    flex: 1,
   },
   {
     headerName: "View",
@@ -57,7 +60,8 @@ const columns = [
     ),
     sortable: false,
     field: "view",
-    width: 200,
+    minWidth: 150,
+    flex: 1,
   },
   {
     headerName: "Edit",
@@ -68,7 +72,8 @@ const columns = [
     ),
     sortable: false,
     field: "edit",
-    width: 200,
+    minWidth: 150,
+    flex: 1,
   },
 ];
 

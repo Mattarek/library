@@ -32,7 +32,8 @@ const columns = [
     field: "user",
     valueGetter: (_, row) => row.user.name,
     sortable: true,
-    width: 200,
+    flex: 1,
+    minWidth: 150,
   },
   {
     headerName: "Book",
@@ -42,13 +43,15 @@ const columns = [
     },
     field: "book.author",
     sortable: true,
-    width: 200,
+    flex: 1,
+    minWidth: 150,
   },
   {
     headerName: "Published at",
     valueGetter: (_, row) => `${row.publishedAt}`,
     field: "publishedAt",
-    width: 200,
+    flex: 1,
+    minWidth: 150,
     sortable: true,
   },
   {
@@ -58,18 +61,20 @@ const columns = [
     ),
     sortable: true,
     field: "rating",
-    width: 200,
+    minWidth: 150,
+    flex: 1,
   },
   {
     headerName: "View",
     renderCell: ({ id }: { id: string }) => (
-      <Link to={id}>
+      <Link to={`${id}/view`}>
         <VisibilityIcon /> View
       </Link>
     ),
     sortable: false,
     field: "view",
-    width: 200,
+    minWidth: 150,
+    flex: 1,
   },
   {
     headerName: "Edit",
@@ -80,7 +85,8 @@ const columns = [
     ),
     sortable: false,
     field: "edit",
-    width: 200,
+    minWidth: 150,
+    flex: 1,
   },
 ];
 
@@ -125,7 +131,7 @@ export const Reviews = () => {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Container style={{ marginTop: 100, marginBottom: 100 }}>
+      <Container style={{ marginTop: 100, marginBottom: 100, width: "100%" }}>
         <DataGrid
           autoHeight
           paginationMode="server"
