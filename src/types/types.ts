@@ -25,6 +25,17 @@ export interface Response {
   };
 }
 
+export interface BookView {
+  "@context": string;
+  "@id": string;
+  "@type": string[];
+  author: string;
+  book: string;
+  condition: string;
+  rating: number;
+  title: string;
+}
+
 export interface DataBooks {
   "@id": string;
   "@type": string[];

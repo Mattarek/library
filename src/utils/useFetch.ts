@@ -1,11 +1,11 @@
 import { useState, useContext, useEffect } from "react";
 import axios, { AxiosError } from "axios";
 import { AuthContext, IAuthContext } from "react-oauth2-code-pkce";
-import { Response } from "../types/types";
+import { Response, BookView } from "../types/types";
 
-export const useFetch = (baseUrl: string, params: string) => {
+export const useFetch = (baseUrl: string, params?: string) => {
   const { token } = useContext<IAuthContext>(AuthContext);
-  const [response, setResponse] = useState<Response>();
+  const [response, setResponse] = useState<Response | BookView>();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
