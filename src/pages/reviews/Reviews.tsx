@@ -1,11 +1,11 @@
-import { AppBar, Box, Container, Toolbar, Typography } from "@mui/material";
-import { DataGrid } from "../../components/dataGrid/DataGrid";
 import { useEffect, useState } from "react";
-import { useFetch } from "../../utils/useFetch";
+import { Link } from "react-router-dom";
+import { AppBar, Box, Container, Toolbar, Typography } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Link } from "react-router-dom";
 import Rating from "@mui/material/Rating";
+import { DataGrid } from "../../components/dataGrid/DataGrid";
+import { useFetch } from "../../utils/useFetch";
 import { State } from "../../types/types";
 
 const columns = [
@@ -88,7 +88,7 @@ export const Reviews = () => {
       const modifiedData = fetchedData["hydra:member"].map((item) => {
         return {
           ...item,
-          id: item["@id"],
+          id: item["@id"].replace(/^\/admin\//, "/"),
           "@id": <EditIcon />,
         };
       });

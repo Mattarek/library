@@ -16,11 +16,11 @@ export const router = createBrowserRouter([
     element: <Books />,
   },
   {
-    path: "/admin/books/:id/edit",
+    path: "/books/:id/edit",
     element: <EditBook />,
   },
   {
-    path: "/admin/books/:id/view",
+    path: "/books/:id/view",
     element: <ViewBook />,
   },
   {
@@ -28,11 +28,11 @@ export const router = createBrowserRouter([
     element: <Reviews />,
   },
   {
-    path: "/admin/reviews/:id/edit",
+    path: "/reviews/:id/edit",
     element: <EditReview />,
   },
   {
-    path: "/admin/reviews/:id/view",
+    path: "/reviews/:id/view",
     element: <ViewReview />,
   },
 ]);
