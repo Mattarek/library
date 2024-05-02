@@ -3,7 +3,13 @@ import axios, { AxiosError } from "axios";
 import { AuthContext, IAuthContext } from "react-oauth2-code-pkce";
 import { Response, BookView } from "../types/types";
 
-export const useFetch = (baseUrl: string, params?: string) => {
+type AxiosMethod = "get" | "post" | "put" | "delete";
+
+export const useFetch = (
+  method: AxiosMethod,
+  baseUrl: string,
+  params?: string
+) => {
   const { token } = useContext<IAuthContext>(AuthContext);
   const [response, setResponse] = useState<Response | BookView>();
   const [isLoading, setIsLoading] = useState(true);
@@ -14,7 +20,7 @@ export const useFetch = (baseUrl: string, params?: string) => {
     setError(null);
 
     try {
-      const firstPageResponse = await axios.get(`${baseUrl}${params}`, {
+      const firstPageResponse = await axios[method](`${baseUrl}${params}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

@@ -75,6 +75,7 @@ export const Books = () => {
   });
 
   const { response: fetchedData, isLoading } = useFetch(
+    "get",
     `https://demo.api-platform.com/admin/books`,
     `?page=${pageState.page}&itemsPerPage=${pageState.pageSize}`
   );

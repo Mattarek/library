@@ -6,6 +6,7 @@ export const EditBook = () => {
   const [bookData, setBookData] = useState<number>();
   const { id } = useParams();
   const { response, error } = useFetch(
+    "get",
     "https://demo.api-platform.com/",
     `admin/books/${id}`
   );
@@ -25,6 +26,9 @@ export const EditBook = () => {
     }
   }, [response]);
 
+  const handleClickDelete = (id) => {
+    console.log(id);
+  };
   console.log(bookData);
   if (error) return <div>Something went wrong!</div>;
   return (
@@ -36,7 +40,7 @@ export const EditBook = () => {
           <div>{bookData.publish_date}</div>
           <div>{bookData.publish_places[0]}</div>
           <div>{bookData.number_of_pages}</div>
-          <div>{bookData.title}</div>
+          <button onClick={() => handleClickDelete(id)}>Delete</button>
         </>
       )}
     </div>

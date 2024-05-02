@@ -79,6 +79,7 @@ export const Reviews = () => {
   });
 
   const { response: fetchedData, isLoading } = useFetch(
+    "get",
     `https://demo.api-platform.com/admin/reviews`,
     `?page=${pageState.page}&itemsPerPage=${pageState.pageSize}`
   );
