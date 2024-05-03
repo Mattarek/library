@@ -1,9 +1,12 @@
 import { useParams } from "react-router-dom";
 import { useFetch } from "../../../utils/useFetch";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { Modal } from "../../../components/Modal/Modal";
 
 export const EditBook = () => {
   const [bookData, setBookData] = useState<number>();
+  const [isModalShown, setIsModalShown] = useState<boolean>(true);
   const { id } = useParams();
   const { response, error } = useFetch(
     "get",
@@ -26,8 +29,17 @@ export const EditBook = () => {
     }
   }, [response]);
 
-  const handleClickDelete = (id) => {
+  const handleClickDelete = async (id: string) => {
     console.log(id);
+    () => setIsModalShown(true);
+    try {
+      const response = await axios.delete(
+        `https://demo.api-platform.com/admin/books/${id}`
+      );
+      console.log("Delete successful:", response.data);
+    } catch (error) {
+      console.error("Error while deleting:", error);
+    }
   };
   console.log(bookData);
   if (error) return <div>Something went wrong!</div>;
@@ -41,6 +53,7 @@ export const EditBook = () => {
           <div>{bookData.publish_places[0]}</div>
           <div>{bookData.number_of_pages}</div>
           <button onClick={() => handleClickDelete(id)}>Delete</button>
+          {isModalShown && <Modal onClose={() => setIsModalShown(false)} />}
         </>
       )}
     </div>

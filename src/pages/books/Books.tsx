@@ -4,7 +4,7 @@ import { AppBar, Box, Container, Toolbar, Typography } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Rating from "@mui/material/Rating";
-import { DataGrid } from "../../components/dataGrid/DataGrid";
+import { DataGrid } from "../../components/DataGrid/DataGrid";
 import { useFetch } from "../../utils/useFetch";
 import { DataBooks } from "../../types/types";
 
