@@ -20,30 +20,17 @@ export const EditBook = () => {
   );
 
   useEffect(() => {
-    if (response && "book" in response) {
-      const { book } = response;
-
-      fetch(book)
-        .then((response) => response.json())
-        .then((data) => {
-          setBookData(data);
-        })
-        .catch((error) => {
-          console.error("Błąd podczas pobierania danych z linku: ", error);
-        });
+    if (response) {
+      setBookData(response);
     }
-  }, [response]);
+  }, [response, bookData]);
 
-  if (error) return <div>Something went wrong!</div>;
+  if (error) return <p>An error occurred while downloading from the api.</p>;
   return (
     <>
       {bookData && (
         <>
           <div>{bookData.title}</div>
-          <div>{bookData.by_statement}</div>
-          <div>{bookData.publish_date}</div>
-          <div>{bookData.publish_places[0]}</div>
-          <div>{bookData.number_of_pages}</div>
 
           <Button onClick={handleOpen}>
             <DeleteIcon />

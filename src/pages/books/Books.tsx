@@ -6,27 +6,33 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import Rating from "@mui/material/Rating";
 import { DataGrid } from "../../components/DataGrid/DataGrid";
 import { useFetch } from "../../utils/useFetch";
-import { DataBooks } from "../../types/types";
+import { BookData, DataBooks } from "../../types/types";
 import { GridColDef } from "@mui/x-data-grid";
 
 const columns: GridColDef[] = [
   {
     headerName: "Title",
+    headerClassName: "super-app-theme--header",
     field: "title",
+    resizable: false,
     sortable: true,
     minWidth: 150,
     flex: 1,
   },
   {
     headerName: "Author",
+    headerClassName: "super-app-theme--header",
     field: "author",
+    resizable: false,
     sortable: true,
     minWidth: 150,
     flex: 1,
   },
   {
     headerName: "Rating",
+    headerClassName: "super-app-theme--header",
     field: "rating",
+    resizable: false,
     sortable: true,
     minWidth: 150,
     flex: 1,
@@ -36,11 +42,13 @@ const columns: GridColDef[] = [
   },
   {
     headerName: "View",
+    headerClassName: "super-app-theme--header",
     renderCell: ({ id }: { id: string | number }) => (
       <Link to={`${id}/view`}>
         <VisibilityIcon /> View
       </Link>
     ),
+    resizable: false,
     sortable: false,
     field: "view",
     minWidth: 150,
@@ -48,11 +56,13 @@ const columns: GridColDef[] = [
   },
   {
     headerName: "Edit",
+    headerClassName: "super-app-theme--header",
     renderCell: ({ id }: { id: string | number }) => (
       <Link to={`${id}/edit`}>
         <EditIcon /> Edit
       </Link>
     ),
+    resizable: false,
     sortable: false,
     field: "edit",
     minWidth: 150,
@@ -89,10 +99,10 @@ export const Books = () => {
     `?page=${pageState.page}&itemsPerPage=${pageState.pageSize}`
   );
 
-  console.log(fetchedData);
   useEffect(() => {
     if (fetchedData?.["hydra:member"]) {
-      const modifiedData = fetchedData["hydra:member"].map((item) => {
+      const modifiedData = fetchedData["hydra:member"].map((item: BookData) => {
+        console.log("item: ", item);
         return {
           ...item,
           id: item["@id"].replace(/^\/admin\//, "/"),
@@ -100,7 +110,6 @@ export const Books = () => {
       });
 
       setPageState((prevPageState) => {
-        console.log(modifiedData);
         return {
           ...prevPageState,
           total: fetchedData["hydra:totalItems"],
@@ -120,7 +129,11 @@ export const Books = () => {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Container style={{ marginTop: 100, marginBottom: 100 }}>
+      <Container
+        sx={{
+          marginTop: 10,
+        }}
+      >
         <DataGrid
           autoHeight
           paginationMode="server"
@@ -136,6 +149,21 @@ export const Books = () => {
             },
           }}
           onPaginationModelChange={handlePageState}
+          sx={{
+            "& .super-app-theme--header": {
+              backgroundColor: "rgba(32, 32, 32, 0.55)",
+            },
+            ".MuiDataGrid-columnSeparator": {
+              display: "none",
+            },
+            "a:link": {
+              textDecoration: "none",
+              color: "black",
+            },
+            "a:visited": {
+              color: "black",
+            },
+          }}
         />
       </Container>
     </Box>

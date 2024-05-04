@@ -1,9 +1,56 @@
-export interface Response {
+export interface BaseEntity {
+  "@context": string;
+  "@id": string;
+  "@type": string[];
+}
+
+export interface BookView extends BaseEntity {
+  author: string;
+  book: string;
+  condition: string;
+  rating: number;
+  title: string;
+}
+
+export interface DataBooks extends BaseEntity {
+  author: string;
+  book: string;
+  condition: string;
+  rating: number;
+  title: string;
+}
+
+export interface DataReviews extends BaseEntity {
+  author: string;
+  book: string;
+  condition: string;
+  rating: number;
+  title: string;
+}
+
+export interface State<T extends BaseEntity> {
+  isLoading: boolean;
+  data: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+export interface BookData {
+  "@id": string;
+  "@type": string[];
+  author: string;
+  book: string;
+  condition: string;
+  title: string;
+}
+
+export interface Response<T extends BaseEntity> {
   id: string;
   "@context": string;
   "@id": string;
   "@type": string;
-  "hydra:member": DataBooks[] | DataReviews[];
+  "hydra:member": T[];
   "hydra:search": {
     "@type": string;
     "hydra:template": string;
@@ -23,45 +70,4 @@ export interface Response {
     "hydra:last": string;
     "hydra:next": string;
   };
-}
-
-export interface BookView {
-  "@context": string;
-  "@id": string;
-  "@type": string[];
-  author: string;
-  book: string;
-  condition: string;
-  rating: number;
-  title: string;
-}
-
-export interface DataBooks {
-  "@id": string;
-  "@type": string[];
-  author: string;
-  book: string;
-  condition: string;
-  id: string;
-  rating: number;
-  title: string;
-}
-
-export interface DataReviews {
-  "@id": string;
-  "@type": string[];
-  author: string;
-  book: string;
-  condition: string;
-  id: string;
-  rating: number;
-  title: string;
-}
-
-export interface State {
-  isLoading: boolean;
-  data: DataReviews[] | DataBooks[];
-  total: number;
-  page: number;
-  pageSize: number;
 }

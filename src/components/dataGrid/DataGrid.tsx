@@ -16,6 +16,6 @@ interface Props extends DataGridProps<DataBooks> {
 
 export function DataGrid({ pageState, ...props }: Props) {
   return (
-    <DataGridMui {...props} rows={pageState.data} rowCount={pageState.total} />
+    <DataGridMui rows={pageState.data} rowCount={pageState.total} {...props} />
   );
 }
