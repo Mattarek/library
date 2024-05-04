@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import { DataBooks } from "../../../types/types";
 import { Modal } from "../../../components/Modal/Modal";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export const EditBook = () => {
   const [bookData, setBookData] = useState<DataBooks | null>(null);
@@ -44,7 +45,10 @@ export const EditBook = () => {
           <div>{bookData.publish_places[0]}</div>
           <div>{bookData.number_of_pages}</div>
 
-          <Button onClick={handleOpen}>Delete</Button>
+          <Button onClick={handleOpen}>
+            <DeleteIcon />
+            Delete
+          </Button>
           <Modal state={isModalShown} setOpen={setIsModalShown} />
         </>
       )}

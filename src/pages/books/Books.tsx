@@ -9,7 +9,7 @@ import { useFetch } from "../../utils/useFetch";
 import { DataBooks } from "../../types/types";
 import { GridColDef } from "@mui/x-data-grid";
 
-const columns: GridColDef = [
+const columns: GridColDef[] = [
   {
     headerName: "Title",
     field: "title",
@@ -20,19 +20,19 @@ const columns: GridColDef = [
   {
     headerName: "Author",
     field: "author",
+    sortable: true,
     minWidth: 150,
     flex: 1,
-    sortable: true,
   },
   {
     headerName: "Rating",
+    field: "rating",
+    sortable: true,
+    minWidth: 150,
+    flex: 1,
     renderCell: ({ row }: { row: DataBooks }) => (
       <Rating value={row.rating} readOnly />
     ),
-    sortable: true,
-    field: "rating",
-    minWidth: 150,
-    flex: 1,
   },
   {
     headerName: "View",
@@ -48,7 +48,7 @@ const columns: GridColDef = [
   },
   {
     headerName: "Edit",
-    renderCell: ({ id }: { id: string }) => (
+    renderCell: ({ id }: { id: string | number }) => (
       <Link to={`${id}/edit`}>
         <EditIcon /> Edit
       </Link>
@@ -127,7 +127,7 @@ export const Books = () => {
           pageSizeOptions={[5, 10, 25, 50, 100]}
           columns={columns}
           pageState={pageState}
-          isLoading={isLoading}
+          loading={isLoading}
           initialState={{
             pagination: {
               paginationModel: {

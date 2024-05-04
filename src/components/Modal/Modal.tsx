@@ -54,7 +54,7 @@ export const Modal = ({ state, setOpen }: Props) => {
           Delete
         </Typography>
         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          Do you really want to delete this book?
+          Are you sure you want to delete this item?
         </Typography>
         <Box
           sx={{
