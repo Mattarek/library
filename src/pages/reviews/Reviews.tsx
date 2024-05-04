@@ -105,13 +105,6 @@ export const Reviews = () => {
 
   return (
     <Box>
-      <AppBar>
-        <Toolbar>
-          <Typography variant="h6" component="div">
-            Server-side Pagination demo
-          </Typography>
-        </Toolbar>
-      </AppBar>
       <Container style={{ marginTop: 100, marginBottom: 100, width: "100%" }}>
         <DataGrid
           autoHeight

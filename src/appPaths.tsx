@@ -5,34 +5,37 @@ import { EditReview } from "./pages/reviews/ID/EditReview";
 import { EditBook } from "./pages/books/ID/EditBook";
 import { ViewBook } from "./pages/books/ID/ViewBook";
 import { ViewReview } from "./pages/reviews/ID/ViewReview";
+import { Layout } from "./layout/library";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <div>Hi</div>,
-  },
-  {
-    path: "/books",
-    element: <Books />,
-  },
-  {
-    path: "/books/:id/edit",
-    element: <EditBook />,
-  },
-  {
-    path: "/books/:id/view",
-    element: <ViewBook />,
-  },
-  {
-    path: "/reviews",
-    element: <Reviews />,
-  },
-  {
-    path: "/reviews/:id/edit",
-    element: <EditReview />,
-  },
-  {
-    path: "/reviews/:id/view",
-    element: <ViewReview />,
+    element: <Layout />,
+    children: [
+      {
+        path: "/books",
+        element: <Books />,
+      },
+      {
+        path: "/books/:id/edit",
+        element: <EditBook />,
+      },
+      {
+        path: "/books/:id/view",
+        element: <ViewBook />,
+      },
+      {
+        path: "/reviews",
+        element: <Reviews />,
+      },
+      {
+        path: "/reviews/:id/edit",
+        element: <EditReview />,
+      },
+      {
+        path: "/reviews/:id/view",
+        element: <ViewReview />,
+      },
+    ],
   },
 ]);

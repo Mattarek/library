@@ -122,13 +122,6 @@ export const Books = () => {
   console.log(pageState);
   return (
     <Box>
-      <AppBar>
-        <Toolbar>
-          <Typography variant="h6" component="div">
-            Server-side Pagination demo
-          </Typography>
-        </Toolbar>
-      </AppBar>
       <Container
         sx={{
           marginTop: 10,
