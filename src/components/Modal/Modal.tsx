@@ -16,11 +16,12 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  border: "2px solid #000",
+  border: "1px solid #000",
   boxShadow: 24,
   pt: 2,
   px: 4,
   pb: 3,
+  borderRadius: "3rem",
 };
 
 export const Modal = ({ state, setOpen }: Props) => {
@@ -56,8 +57,16 @@ export const Modal = ({ state, setOpen }: Props) => {
         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
           Do you really want to delete this book?
         </Typography>
-        <Button onClick={handleClickDelete}>Confirm</Button>
-        <Button onClick={handleClose}>Close</Button>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Button onClick={handleClickDelete}>Confirm</Button>
+          <Button onClick={handleClose}>Close</Button>
+        </Box>
       </Box>
     </ModalMUI>
   );
