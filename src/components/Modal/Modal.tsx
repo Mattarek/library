@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useCallback } from "react";
 import { Box, Typography, Modal as ModalMUI } from "@mui/material";
 import { Button } from "../../../../Doctors/src/components/Button/Button";
 import { useParams } from "react-router-dom";
@@ -26,7 +26,7 @@ const style = {
 export const Modal = ({ state, setOpen }: Props) => {
   const { id } = useParams();
 
-  const handleClickDelete = async () => {
+  const handleClickDelete = useCallback(async () => {
     try {
       const response = await axios.delete(
         `https://demo.api-platform.com/admin/books/${id}`
@@ -36,11 +36,11 @@ export const Modal = ({ state, setOpen }: Props) => {
     } catch (error) {
       console.error("Error while deleting:", error);
     }
-  };
+  }, [id]);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setOpen(false);
-  };
+  }, [setOpen]);
 
   return (
     <ModalMUI
