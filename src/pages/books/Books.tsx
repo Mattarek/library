@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { AppBar, Box, Container, Toolbar, Typography } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -44,9 +44,9 @@ const columns: GridColDef[] = [
     headerName: "View",
     headerClassName: "super-app-theme--header",
     renderCell: ({ id }: { id: string | number }) => (
-      <Link to={`${id}/view`}>
+      <NavLink to={`${id}/view`}>
         <VisibilityIcon /> View
-      </Link>
+      </NavLink>
     ),
     resizable: false,
     sortable: false,
@@ -58,9 +58,9 @@ const columns: GridColDef[] = [
     headerName: "Edit",
     headerClassName: "super-app-theme--header",
     renderCell: ({ id }: { id: string | number }) => (
-      <Link to={`${id}/edit`}>
+      <NavLink to={`${id}/edit`}>
         <EditIcon /> Edit
-      </Link>
+      </NavLink>
     ),
     resizable: false,
     sortable: false,

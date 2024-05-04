@@ -46,9 +46,9 @@ const columns = [
   {
     headerName: "View",
     renderCell: ({ id }: { id: string }) => (
-      <Link to={`${id}/view`}>
+      <NavLink to={`${id}/view`}>
         <VisibilityIcon /> View
-      </Link>
+      </NavLink>
     ),
     sortable: false,
     field: "view",
@@ -58,9 +58,9 @@ const columns = [
   {
     headerName: "Edit",
     renderCell: ({ id }: { id: string }) => (
-      <Link to={`${id}/edit`}>
+      <NavLink to={`${id}/edit`}>
         <EditIcon /> Edit
-      </Link>
+      </NavLink>
     ),
     sortable: false,
     field: "edit",
