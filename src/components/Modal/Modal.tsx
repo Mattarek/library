@@ -16,11 +16,10 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  border: "1px solid #000",
+  border: ".125rem solid #000",
   boxShadow: 24,
-  pt: 2,
-  px: 4,
-  pb: 3,
+  padding: "1rem 2rem 2rem 1.5rem",
+
   borderRadius: "3rem",
 };
 
