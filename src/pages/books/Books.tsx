@@ -7,8 +7,9 @@ import Rating from "@mui/material/Rating";
 import { DataGrid } from "../../components/DataGrid/DataGrid";
 import { useFetch } from "../../utils/useFetch";
 import { DataBooks } from "../../types/types";
+import { GridColDef } from "@mui/x-data-grid";
 
-const columns = [
+const columns: GridColDef = [
   {
     headerName: "Title",
     field: "title",
@@ -35,7 +36,7 @@ const columns = [
   },
   {
     headerName: "View",
-    renderCell: ({ id }: { id: string }) => (
+    renderCell: ({ id }: { id: string | number }) => (
       <Link to={`${id}/view`}>
         <VisibilityIcon /> View
       </Link>
@@ -74,6 +75,14 @@ export const Books = () => {
     pageSize: 5,
   });
 
+  const handlePageState = (newPage: { page: number; pageSize: number }) => {
+    setPageState((prevState) => ({
+      ...prevState,
+      page: newPage.page + 1,
+      pageSize: newPage.pageSize,
+    }));
+  };
+
   const { response: fetchedData, isLoading } = useFetch(
     "get",
     `https://demo.api-platform.com/admin/books`,
@@ -87,7 +96,6 @@ export const Books = () => {
         return {
           ...item,
           id: item["@id"].replace(/^\/admin\//, "/"),
-          "@id": <EditIcon />,
         };
       });
 
@@ -120,7 +128,6 @@ export const Books = () => {
           columns={columns}
           pageState={pageState}
           isLoading={isLoading}
-          setPageState={setPageState}
           initialState={{
             pagination: {
               paginationModel: {
@@ -128,16 +135,7 @@ export const Books = () => {
               },
             },
           }}
-          onPaginationModelChange={(newPage: {
-            page: number;
-            pageSize: number;
-          }) => {
-            setPageState((prevState) => ({
-              ...prevState,
-              page: newPage.page + 1,
-              pageSize: newPage.pageSize,
-            }));
-          }}
+          onPaginationModelChange={handlePageState}
         />
       </Container>
     </Box>

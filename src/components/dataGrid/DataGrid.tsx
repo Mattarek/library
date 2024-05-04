@@ -1,26 +1,21 @@
-import { DataGrid as DataGridMui, GridColDef } from "@mui/x-data-grid";
+import {
+  DataGrid as DataGridMui,
+  DataGridProps,
+  GridColDef,
+} from "@mui/x-data-grid";
 import { DataBooks } from "../../types/types";
 
-interface Props {
+interface Props extends DataGridProps<DataBooks> {
   pageState: {
-    isLoading: boolean;
     data: DataBooks[];
     total: number;
-    page: number;
-    pageSize: number;
   };
-  isLoading: boolean;
+  loading: boolean;
   columns: GridColDef<DataBooks>[];
 }
 
-export function DataGrid({ columns, isLoading, pageState, ...props }: Props) {
+export function DataGrid({ pageState, ...props }: Props) {
   return (
-    <DataGridMui
-      {...props}
-      columns={columns}
-      rows={pageState.data}
-      loading={isLoading}
-      rowCount={pageState.total}
-    />
+    <DataGridMui {...props} rows={pageState.data} rowCount={pageState.total} />
   );
 }

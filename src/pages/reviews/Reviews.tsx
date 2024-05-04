@@ -90,7 +90,6 @@ export const Reviews = () => {
         return {
           ...item,
           id: item["@id"].replace(/^\/admin\//, "/"),
-          "@id": <EditIcon />,
         };
       });
 

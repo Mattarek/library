@@ -1,11 +1,64 @@
+import axios from "axios";
+import { Dispatch, SetStateAction } from "react";
+import { Box, Typography, Modal as ModalMUI } from "@mui/material";
+import { Button } from "../../../../Doctors/src/components/Button/Button";
+import { useParams } from "react-router-dom";
+
 interface Props {
-  onClose: () => void;
+  state: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }
-export const Modal = ({ onClose }: Props) => {
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  pt: 2,
+  px: 4,
+  pb: 3,
+};
+
+export const Modal = ({ state, setOpen }: Props) => {
+  const { id } = useParams();
+
+  const handleClickDelete = async () => {
+    try {
+      const response = await axios.delete(
+        `https://demo.api-platform.com/admin/books/${id}`
+      );
+
+      console.log("Delete successful:", response.data);
+    } catch (error) {
+      console.error("Error while deleting:", error);
+    }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
-    <div>
-      <p>Do you want to remove book?</p>
-      <button onClick={onClose}>Close</button>
-    </div>
+    <ModalMUI
+      open={state}
+      onClose={handleClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box sx={style}>
+        <Typography id="modal-modal-title" variant="h6" component="h2">
+          Delete
+        </Typography>
+        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          Do you really want to delete this book?
+        </Typography>
+        <Button onClick={handleClickDelete}>Confirm</Button>
+        <Button onClick={handleClose}>Close</Button>
+      </Box>
+    </ModalMUI>
   );
 };
