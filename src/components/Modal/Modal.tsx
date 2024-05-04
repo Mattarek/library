@@ -1,9 +1,8 @@
 import axios from "axios";
 import { Dispatch, SetStateAction, useCallback } from "react";
 import { Box, Typography, Modal as ModalMUI } from "@mui/material";
-import { Button } from "../../../../Doctors/src/components/Button/Button";
 import { useParams } from "react-router-dom";
-
+import Button from "@mui/material/Button";
 interface Props {
   state: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
