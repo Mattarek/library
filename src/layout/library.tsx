@@ -20,7 +20,7 @@ import { AppBar } from "../components/AppBar/AppBar";
 
 export function LibraryLayout() {
   const [open, setOpen] = useState(false);
-  const [tab, setTab] = useState<SetStateAction<"Books" | "Reviews">>("Books");
+  const [tab, setTab] = useState<"Books" | "Reviews">("Books");
 
   const handleDrawer = () => {
     setOpen(!open);
@@ -56,7 +56,7 @@ export function LibraryLayout() {
               to={`/${text}`}
               style={{ textDecoration: "none", color: "black" }}
               onClick={() => {
-                setTab(text);
+                setTab(tab === "Books" ? "Reviews" : "Books");
               }}
             >
               <ListItem disablePadding sx={{ display: "block" }}>
