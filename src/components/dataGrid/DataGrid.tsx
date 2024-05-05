@@ -1,8 +1,4 @@
-import {
-  DataGrid as DataGridMui,
-  DataGridProps,
-  GridColDef,
-} from "@mui/x-data-grid";
+import { DataGrid as DataGridMui, DataGridProps } from "@mui/x-data-grid";
 import { DataBooks } from "../../types/types";
 
 interface Props extends DataGridProps<DataBooks> {
@@ -10,8 +6,6 @@ interface Props extends DataGridProps<DataBooks> {
     data: DataBooks[];
     total: number;
   };
-  loading: boolean;
-  columns: GridColDef<DataBooks>[];
 }
 
 export function DataGrid({ pageState, ...props }: Props) {

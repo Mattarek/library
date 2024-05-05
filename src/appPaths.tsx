@@ -5,12 +5,12 @@ import { EditReview } from "./pages/reviews/ID/EditReview";
 import { EditBook } from "./pages/books/ID/EditBook";
 import { ViewBook } from "./pages/books/ID/ViewBook";
 import { ViewReview } from "./pages/reviews/ID/ViewReview";
-import { Layout } from "./layout/library";
+import { LibraryLayout } from "./layout/library";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: <LibraryLayout />,
     children: [
       {
         path: "/books",

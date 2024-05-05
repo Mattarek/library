@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
-import { AppBar, Box, Container, Toolbar, Typography } from "@mui/material";
+import { NavLink } from "react-router-dom";
+import { Box, Container } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Rating from "@mui/material/Rating";
