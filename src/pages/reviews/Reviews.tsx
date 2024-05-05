@@ -112,7 +112,7 @@ export const Reviews = () => {
 
   return (
     <Box>
-      <Container sx={{ marginTop: 10, width: "100%" }}>
+      <Container sx={{ width: "100%" }}>
         <DataGrid
           autoHeight
           paginationMode="server"

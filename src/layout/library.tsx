@@ -1,4 +1,4 @@
-import * as React from "react";
+import { SetStateAction, useState } from "react";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
@@ -19,7 +19,8 @@ import { DrawerHeader } from "../components/DrawerHeader/DrawerHeader";
 import { AppBar } from "../components/AppBar/AppBar";
 
 export function LibraryLayout() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [tab, setTab] = useState<SetStateAction<"Books" | "Reviews">>("Books");
 
   const handleDrawer = () => {
     setOpen(!open);
@@ -42,7 +43,7 @@ export function LibraryLayout() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Books
+            {tab}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -54,6 +55,9 @@ export function LibraryLayout() {
               key={text}
               to={`/${text}`}
               style={{ textDecoration: "none", color: "black" }}
+              onClick={() => {
+                setTab(text);
+              }}
             >
               <ListItem disablePadding sx={{ display: "block" }}>
                 <ListItemButton
@@ -80,6 +84,7 @@ export function LibraryLayout() {
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <DrawerHeader />
         <Outlet />
       </Box>
     </Box>
