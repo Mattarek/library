@@ -11,7 +11,9 @@ import { State } from "../../types/types";
 const columns = [
   {
     headerName: "User",
+    headerClassName: "super-app-theme--header",
     field: "user",
+
     valueGetter: (_, row) => row.user.name,
     sortable: true,
     flex: 1,
@@ -19,6 +21,7 @@ const columns = [
   },
   {
     headerName: "Book",
+    headerClassName: "super-app-theme--header",
     valueGetter: (_, row) => `${row.book.title} - ${row.book.author}`,
     field: "book.author",
     sortable: true,
@@ -27,6 +30,7 @@ const columns = [
   },
   {
     headerName: "Published at",
+    headerClassName: "super-app-theme--header",
     valueGetter: (_, row) => `${row.publishedAt}`,
     field: "publishedAt",
     flex: 1,
@@ -35,6 +39,7 @@ const columns = [
   },
   {
     headerName: "Rating",
+    headerClassName: "super-app-theme--header",
     renderCell: ({ row }: { row: Data }) => (
       <Rating value={row.rating} readOnly />
     ),
@@ -45,6 +50,7 @@ const columns = [
   },
   {
     headerName: "View",
+    headerClassName: "super-app-theme--header",
     renderCell: ({ id }: { id: string }) => (
       <NavLink to={`${id}/view`}>
         <VisibilityIcon /> View
@@ -57,6 +63,7 @@ const columns = [
   },
   {
     headerName: "Edit",
+    headerClassName: "super-app-theme--header",
     renderCell: ({ id }: { id: string }) => (
       <NavLink to={`${id}/edit`}>
         <EditIcon /> Edit
@@ -105,7 +112,7 @@ export const Reviews = () => {
 
   return (
     <Box>
-      <Container style={{ marginTop: 100, marginBottom: 100, width: "100%" }}>
+      <Container sx={{ marginTop: 10, width: "100%" }}>
         <DataGrid
           autoHeight
           paginationMode="server"
@@ -130,6 +137,21 @@ export const Reviews = () => {
               page: newPage.page + 1,
               pageSize: newPage.pageSize,
             }));
+          }}
+          sx={{
+            "& .super-app-theme--header": {
+              backgroundColor: "rgba(32, 32, 32, 0.55)",
+            },
+            ".MuiDataGrid-columnSeparator": {
+              display: "none",
+            },
+            "a:link": {
+              textDecoration: "none",
+              color: "black",
+            },
+            "a:visited": {
+              color: "black",
+            },
           }}
         />
       </Container>

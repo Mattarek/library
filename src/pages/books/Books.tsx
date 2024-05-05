@@ -122,11 +122,7 @@ export const Books = () => {
   console.log(pageState);
   return (
     <Box>
-      <Container
-        sx={{
-          marginTop: 10,
-        }}
-      >
+      <Container sx={{ marginTop: 10, marginBottom: 100, width: "100%" }}>
         <DataGrid
           autoHeight
           paginationMode="server"
