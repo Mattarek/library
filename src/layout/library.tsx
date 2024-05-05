@@ -123,7 +123,11 @@ export function LibraryLayout() {
         <DrawerHeader />
         <List>
           {["Books", "Reviews"].map((text, index) => (
-            <NavLink key={text} to={`/${text}`}>
+            <NavLink
+              key={text}
+              to={`/${text}`}
+              style={{ textDecoration: "none", color: "black" }}
+            >
               <ListItem disablePadding sx={{ display: "block" }}>
                 <ListItemButton
                   sx={{

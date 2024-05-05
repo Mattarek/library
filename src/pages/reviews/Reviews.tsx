@@ -119,7 +119,7 @@ export const Reviews = () => {
           pageSizeOptions={[5, 10, 25, 50, 100]}
           columns={columns}
           pageState={pageState}
-          isLoading={isLoading}
+          loading={isLoading}
           setPageState={setPageState}
           initialState={{
             pagination: {
