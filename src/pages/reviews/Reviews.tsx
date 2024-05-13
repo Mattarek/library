@@ -6,7 +6,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import Rating from "@mui/material/Rating";
 import { DataGrid } from "../../components/DataGrid/DataGrid";
 import { useFetch } from "../../utils/useFetch";
-import { State } from "../../types/types";
+import { Review, State } from "../../types/types";
 
 const columns = [
   {
@@ -31,7 +31,7 @@ const columns = [
   {
     headerName: "Published at",
     headerClassName: "super-app-theme--header",
-    valueGetter: (_, row) => `${row.publishedAt}`,
+    valueGetter: (_, row) => `${row.publishedAt.slice(0, 10)}`,
     field: "publishedAt",
     flex: 1,
     minWidth: 150,
@@ -77,7 +77,7 @@ const columns = [
 ];
 
 export const Reviews = () => {
-  const [pageState, setPageState] = useState<State>({
+  const [pageState, setPageState] = useState<State<Review>>({
     isLoading: false,
     data: [],
     total: 0,
@@ -92,22 +92,21 @@ export const Reviews = () => {
   );
 
   useEffect(() => {
-    if (fetchedData?.["hydra:member"]) {
-      const modifiedData = fetchedData["hydra:member"].map((item) => {
-        return {
-          ...item,
-          id: item["@id"].replace(/^\/admin\//, "/"),
-        };
-      });
+    if (!fetchedData?.["hydra:member"]) return;
+    const modifiedData = fetchedData["hydra:member"].map((item) => {
+      return {
+        ...item,
+        id: item["@id"].replace(/^\/admin\//, "/"),
+      };
+    });
 
-      setPageState((prevPageState) => {
-        return {
-          ...prevPageState,
-          total: fetchedData["hydra:totalItems"],
-          data: modifiedData,
-        };
-      });
-    }
+    setPageState((prevPageState): State<Review> => {
+      return {
+        ...prevPageState,
+        total: fetchedData["hydra:totalItems"],
+        data: modifiedData,
+      };
+    });
   }, [fetchedData]);
 
   return (

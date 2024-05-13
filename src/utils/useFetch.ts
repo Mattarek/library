@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import axios, { AxiosError } from "axios";
 import { AuthContext, IAuthContext } from "react-oauth2-code-pkce";
-import { Response, BookView } from "../types/types";
+import { Response, BookView, Review } from "../types/types";
 
 type AxiosMethod = "get" | "post" | "put" | "delete";
 
@@ -11,7 +11,7 @@ export const useFetch = (
   params?: string
 ) => {
   const { token } = useContext<IAuthContext>(AuthContext);
-  const [response, setResponse] = useState<Response | BookView>();
+  const [response, setResponse] = useState<Response<Review> | Response<BookView>>();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 

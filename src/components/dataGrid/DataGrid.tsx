@@ -3,8 +3,11 @@ import { DataBooks } from "../../types/types";
 
 interface Props extends DataGridProps<DataBooks> {
   pageState: {
+    isLoading: boolean;
     data: DataBooks[];
     total: number;
+    page: number;
+    pageSize: number;
   };
 }
 

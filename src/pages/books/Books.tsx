@@ -4,10 +4,13 @@ import { Box, Container } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Rating from "@mui/material/Rating";
+import { GridColDef } from "@mui/x-data-grid";
+
 import { DataGrid } from "../../components/DataGrid/DataGrid";
+import { FormikSearchForm } from "../../components/Form/FormikSearchForm";
+
 import { useFetch } from "../../utils/useFetch";
 import { BookData, DataBooks } from "../../types/types";
-import { GridColDef } from "@mui/x-data-grid";
 
 const columns: GridColDef[] = [
   {
@@ -102,7 +105,6 @@ export const Books = () => {
   useEffect(() => {
     if (fetchedData?.["hydra:member"]) {
       const modifiedData = fetchedData["hydra:member"].map((item: BookData) => {
-        console.log("item: ", item);
         return {
           ...item,
           id: item["@id"].replace(/^\/admin\//, "/"),
@@ -119,9 +121,9 @@ export const Books = () => {
     }
   }, [fetchedData]);
 
-  console.log(pageState);
   return (
     <Box>
+      <FormikSearchForm />
       <Container sx={{ width: "100%" }}>
         <DataGrid
           autoHeight
@@ -142,7 +144,7 @@ export const Books = () => {
             "& .super-app-theme--header": {
               backgroundColor: "rgba(32, 32, 32, 0.55)",
             },
-            ".MuiDataGrid-columnSeparator": {
+            "& .MuiDataGrid-columnSeparator": {
               display: "none",
             },
             "a:link": {

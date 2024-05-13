@@ -1,5 +1,5 @@
 export interface BaseEntity {
-  "@context": string;
+  "@context"?: string;
   "@id": string;
   "@type": string[];
 }
@@ -28,13 +28,37 @@ export interface DataReviews extends BaseEntity {
   title: string;
 }
 
-export interface State<T extends BaseEntity> {
+export interface State<T> {
+  "@id": string;
+  "@type": string[];
   isLoading: boolean;
   data: T[];
   total: number;
   page: number;
   pageSize: number;
 }
+
+
+export interface Review extends BaseEntity {
+
+  body: {
+    "@id": string;
+    id?: number
+    "@type": string[];
+    author: string;
+    title: string;
+  };
+  publishedAt: string;
+  rating: number;
+  user: {
+    "@id": string;
+    "@type": string;
+    firstName: string;
+    lastName: string;
+    name: string;
+  };
+}
+
 
 export interface BookData {
   "@id": string;

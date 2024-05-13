@@ -1,4 +1,4 @@
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
@@ -14,7 +14,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { NavLink, Outlet } from "react-router-dom";
 import { Drawer } from "../components/Drawer/Drawer";
-
 import { DrawerHeader } from "../components/DrawerHeader/DrawerHeader";
 import { AppBar } from "../components/AppBar/AppBar";
 

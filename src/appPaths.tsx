@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, redirect } from "react-router-dom";
 import { Reviews } from "./pages/reviews/Reviews";
 import { Books } from "./pages/books/Books";
 import { EditReview } from "./pages/reviews/ID/EditReview";
@@ -11,7 +11,12 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <LibraryLayout />,
+
     children: [
+      {
+        index: true,
+        loader: async () => redirect("/books"),
+      },
       {
         path: "/books",
         element: <Books />,

@@ -27,11 +27,7 @@ export const Modal = ({ state, setOpen }: Props) => {
 
   const handleClickDelete = useCallback(async () => {
     try {
-      const response = await axios.delete(
-        `https://demo.api-platform.com/admin/books/${id}`
-      );
-
-      console.log("Delete successful:", response.data);
+      await axios.delete(`https://demo.api-platform.com/admin/books/${id}`);
     } catch (error) {
       console.error("Error while deleting:", error);
     }
