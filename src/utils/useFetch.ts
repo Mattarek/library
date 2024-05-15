@@ -35,7 +35,7 @@ export const useFetch = (
 
   useEffect(() => {
     fetchData();
-  }, [baseUrl, params]);
+  }, [baseUrl, params,]);
 
   return { response, isLoading, error };
 };
