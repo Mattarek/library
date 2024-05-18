@@ -17,6 +17,7 @@ const authConfig: TAuthConfig = {
     "https://demo.api-platform.com/oidc/realms/demo/protocol/openid-connect/token",
   redirectUri: window.location.origin,
   scope: "openid",
+  autoLogin: true,
   onRefreshTokenExpire: (event: TRefreshTokenExpiredEvent) =>
     window.confirm(
       "Session expired. Refresh page to continue using the site?"

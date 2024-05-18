@@ -26,7 +26,13 @@ export function LibraryLayout() {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box
+      sx={{
+        display: "flex",
+
+        height: "100vh",
+      }}
+    >
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
@@ -53,7 +59,10 @@ export function LibraryLayout() {
             <NavLink
               key={text}
               to={`/${text}`}
-              style={{ textDecoration: "none", color: "black" }}
+              style={{
+                textDecoration: "none",
+                color: "black",
+              }}
               onClick={() => {
                 setTab(tab === "Books" ? "Reviews" : "Books");
               }}

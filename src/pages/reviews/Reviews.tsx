@@ -139,7 +139,7 @@ export const Reviews = () => {
           }}
           sx={{
             "& .super-app-theme--header": {
-              backgroundColor: "rgba(32, 32, 32, 0.55)",
+              backgroundColor: "rgba(255, 255, 255, 0.965)",
             },
             ".MuiDataGrid-columnSeparator": {
               display: "none",
