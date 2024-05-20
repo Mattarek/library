@@ -17,6 +17,7 @@ export const EditReview = () => {
 
   useEffect(() => {
     if (response) {
+      console.log(reviewData)
       setReviewData(response);
     }
   }, [response, starsCount]);
@@ -57,8 +58,8 @@ export const EditReview = () => {
             name="simple-controlled"
             value={reviewData.rating}
             onChange={(event, newValue) => {
-              setReviewData((prevState) => ({
-                ...prevState,
+              setReviewData((prev) => ({
+                ...prev,
                 rating: newValue,
               }));
             }}

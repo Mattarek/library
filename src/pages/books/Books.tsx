@@ -89,14 +89,14 @@ export const Books = () => {
   });
 
   const handlePageState = (newPage: { page: number; pageSize: number }) => {
-    setPageState((prevState) => ({
-      ...prevState,
+    setPageState((prev) => ({
+      ...prev,
       page: newPage.page + 1,
       pageSize: newPage.pageSize,
     }));
   };
 
-  const { response: fetchedData, isLoading } = useFetch(
+  const { response: fetchedData, isLoading } = useFetch<BookData>(
     "get",
     `https://demo.api-platform.com/admin/books`,
     `?page=${pageState.page}&itemsPerPage=${pageState.pageSize}`
@@ -121,6 +121,8 @@ export const Books = () => {
     }
   }, [fetchedData]);
 
+
+  console.log(pageState)
   return (
     <Box>
       <FormikSearchForm />

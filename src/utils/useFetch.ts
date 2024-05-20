@@ -1,17 +1,17 @@
 import { useState, useContext, useEffect } from "react";
 import axios, { AxiosError } from "axios";
 import { AuthContext, IAuthContext } from "react-oauth2-code-pkce";
-import { Response, BookView, Review } from "../types/types";
+import { Response, BaseEntity } from "../types/types";
 
 type AxiosMethod = "get" | "post" | "put" | "delete";
 
-export const useFetch = (
+export const useFetch = <T extends BaseEntity>(
   method: AxiosMethod,
   baseUrl: string,
   params?: string
 ) => {
   const { token } = useContext<IAuthContext>(AuthContext);
-  const [response, setResponse] = useState<Response<Review> | Response<BookView>>();
+  const [response, setResponse] = useState<Response<T> | null>();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -20,14 +20,14 @@ export const useFetch = (
     setError(null);
 
     try {
-      const firstPageResponse = await axios[method](`${baseUrl}${params}`, {
+      const dataResponse = await axios[method](`${baseUrl}${params}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      if (firstPageResponse.status === 200) setResponse(firstPageResponse.data);
+      console.log(dataResponse)
+      setResponse(dataResponse.data)
     } catch (error) {
       const err = error as AxiosError;
-      console.log(err.response?.data);
+      setError(err)
     } finally {
       setIsLoading(false);
     }
@@ -35,7 +35,7 @@ export const useFetch = (
 
   useEffect(() => {
     fetchData();
-  }, [baseUrl, params]);
+  }, [method, baseUrl, params]);
 
   return { response, isLoading, error };
 };

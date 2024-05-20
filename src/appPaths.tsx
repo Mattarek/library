@@ -13,9 +13,6 @@ export const router = createBrowserRouter([
     element: <LibraryLayout />,
     children: [
       {
-        index: true,
-      },
-      {
         path: "/books",
         element: <Books />,
       },

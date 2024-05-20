@@ -1,29 +1,37 @@
 import { useParams } from "react-router-dom";
 import { useFetch } from "../../../utils/useFetch";
 import { Rating } from "@mui/material";
+import { useEffect, useState } from "react";
 
 export const ViewReview = () => {
   const { id } = useParams();
+  const [data, setData] = useState()
+  
   const { response, error } = useFetch(
     "get",
     "https://demo.api-platform.com/",
     `admin/reviews/${id}`
   );
 
-  if (error) return error;
+  useEffect(() => {
+    setData(response)
+    console.log(data)
+  }, [response])
+  
+  
+
   return (
-    response && (
+    data && (
       <div>
-        <div>Author: {response.user.name}</div>
-        <div>Book: {response.book.title}</div>
+        <div>Author: {data.user.name}</div>
+        <div>Book: {data.book.title}</div>
         <div>
-          Published at:{" "}
-          {response.publishedAt.slice(0, 10).split("-").reverse().join(".")}
+          {`Published at: ${data.publishedAt.slice(0, 10).split("-").reverse().join(".")}`}
         </div>
         <div>
-          Rating: <Rating value={response.rating} readOnly /> {}
+          Rating: <Rating value={data.rating} readOnly /> {}
         </div>
-        <div>Body: {response.body}</div>
+        <div>Body: {data.body}</div>
       </div>
     )
   );

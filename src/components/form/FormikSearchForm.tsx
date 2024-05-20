@@ -62,7 +62,6 @@ export const FormikSearchForm = () => {
       <Button
         color="primary"
         variant="contained"
-        type="submit"
         onClick={onSubmit}
       >
         Submit

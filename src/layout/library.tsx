@@ -1,26 +1,21 @@
 import { useState } from "react";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
+import {Box, Toolbar, List, CssBaseline, Typography, IconButton,ListItem,ListItemButton,ListItemIcon,ListItemText } from "@mui/material/";
+
 import MenuIcon from "@mui/icons-material/Menu";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import ReviewsIcon from "@mui/icons-material/Reviews";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import { NavLink, Outlet } from "react-router-dom";
+
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { Drawer } from "../components/Drawer/Drawer";
 import { DrawerHeader } from "../components/DrawerHeader/DrawerHeader";
 import { AppBar } from "../components/AppBar/AppBar";
 
+const menuItems = ["books", "reviews"]
+
 export function LibraryLayout() {
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<"Books" | "Reviews">("Books");
-
+  const {pathname} = useLocation();
   const handleDrawer = () => {
     setOpen(!open);
   };
@@ -29,7 +24,6 @@ export function LibraryLayout() {
     <Box
       sx={{
         display: "flex",
-
         height: "100vh",
       }}
     >
@@ -48,14 +42,14 @@ export function LibraryLayout() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            {tab}
+            {pathname.slice(1).split('/').shift().replace(/^./, char => char.toUpperCase())  }
           </Typography>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader />
         <List>
-          {["Books", "Reviews"].map((text, index) => (
+          {menuItems.map((text, index) => (
             <NavLink
               key={text}
               to={`/${text}`}
