@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Box, Container } from "@mui/material";
+import { Box, Button, Container } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Rating from "@mui/material/Rating";
@@ -53,7 +53,7 @@ const columns = [
     headerClassName: "super-app-theme--header",
     renderCell: ({ id }: { id: string }) => (
       <NavLink to={`${id}/view`}>
-        <VisibilityIcon /> View
+        <Button startIcon={<VisibilityIcon />}>View</Button>
       </NavLink>
     ),
     sortable: false,
@@ -66,7 +66,7 @@ const columns = [
     headerClassName: "super-app-theme--header",
     renderCell: ({ id }: { id: string }) => (
       <NavLink to={`${id}/edit`}>
-        <EditIcon /> Edit
+        <Button startIcon={<EditIcon />}>Edit</Button>
       </NavLink>
     ),
     sortable: false,
