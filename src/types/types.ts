@@ -1,10 +1,38 @@
-export interface BaseEntity {
-  "@context"?: string;
-  "@id": string;
-  "@type": string[];
+export interface HydraSearch {
+  '@type': string;
+  'hydra:template': string;
+  'hydra:variableRepresentation': string;
+  'hydra:mapping': {
+    '@type': string;
+    variable: string;
+    property: string;
+    required: boolean;
+  }[];
 }
 
-export interface BookView extends BaseEntity {
+export interface HydraView {
+  '@id': string;
+  '@type': string;
+  'hydra:first': string;
+  'hydra:last': string;
+  'hydra:next': string;
+}
+
+export interface Response<T> {
+  data: {
+    '@context': string;
+    '@id': string;
+    '@type': string;
+    'hydra:totalItems': number;
+    'hydra:search': HydraSearch;
+    'hydra:view': HydraView;
+    'hydra:member': T[];
+  }
+}
+
+export interface Book {
+  '@id': string;
+  '@type': string[];
   author: string;
   book: string;
   condition: string;
@@ -12,47 +40,21 @@ export interface BookView extends BaseEntity {
   title: string;
 }
 
-export interface DataBooks extends BaseEntity {
-  author: string;
-  book: string;
-  condition: string;
-  rating: number;
-  title: string;
-}
-
-export interface DataReviews extends BaseEntity {
-  author: string;
-  book: string;
-  condition: string;
-  rating: number;
-  title: string;
-}
-
-export interface State<T> {
-  "@id": string;
-  "@type": string[];
-  isLoading: boolean;
-  data: T[];
-  total: number;
-  page: number;
-  pageSize: number;
-}
-
-
-export interface Review extends BaseEntity {
-
-  body: {
-    "@id": string;
-    id?: number
-    "@type": string[];
+export interface Review {
+  '@id': string;
+  '@type': string;
+  body: string;
+  book: {
+    '@id': string;
+    '@type': string[];
     author: string;
     title: string;
   };
   publishedAt: string;
   rating: number;
   user: {
-    "@id": string;
-    "@type": string;
+    '@id': string;
+    '@type': string;
     firstName: string;
     lastName: string;
     name: string;
@@ -60,38 +62,9 @@ export interface Review extends BaseEntity {
 }
 
 
-export interface BookData {
-  "@id": string;
-  "@type": string[];
-  author: string;
-  book: string;
-  condition: string;
-  title: string;
+export interface UseFetch<T>{
+  isLoading: boolean,
+  error: boolean,
+  fetchedData: Response<T>
 }
-
-export interface Response<T extends BaseEntity> {
-  id: string;
-  "@context": string;
-  "@id": string;
-  "@type": string;
-  "hydra:member": T[];
-  "hydra:search": {
-    "@type": string;
-    "hydra:template": string;
-    "hydra:variableRepresentation": string;
-    "hydra:mapping": {
-      "@type": string;
-      variable: string;
-      property: string;
-      required: boolean;
-    };
-  };
-  "hydra:totalItems": number;
-  "hydra:view": {
-    "@id": string;
-    "@type": string;
-    "hydra:first": string;
-    "hydra:last": string;
-    "hydra:next": string;
-  };
-}
+export type AxiosMethod = "get" | "post" | "put" | "delete";

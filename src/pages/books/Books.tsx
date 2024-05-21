@@ -10,7 +10,7 @@ import { DataGrid } from "../../components/DataGrid/DataGrid";
 import { FormikSearchForm } from "../../components/Form/FormikSearchForm";
 
 import { useFetch } from "../../utils/useFetch";
-import { BookData, DataBooks } from "../../types/types";
+import { Book, Response, UseFetch } from "../../types/types";
 
 const columns: GridColDef[] = [
   {
@@ -37,7 +37,7 @@ const columns: GridColDef[] = [
     sortable: true,
     minWidth: 150,
     flex: 1,
-    renderCell: ({ row }: { row: DataBooks }) => (
+    renderCell: ({ row }: { row: Book }) => (
       <Rating value={row.rating} readOnly />
     ),
   },
@@ -72,7 +72,7 @@ const columns: GridColDef[] = [
 export const Books = () => {
   const [pageState, setPageState] = useState<{
     isLoading: boolean;
-    data: DataBooks[];
+    data: Book[];
     total: number;
     page: number;
     pageSize: number;
@@ -92,36 +92,35 @@ export const Books = () => {
     }));
   };
 
-  const { fetchedData, isLoading } = useFetch<BookData>(
+  const { fetchedData, isLoading } = useFetch<Response<Book>>(
     "get",
     `https://demo.api-platform.com/admin/books`,
     `?page=${pageState.page}&itemsPerPage=${pageState.pageSize}`
   );
 
   useEffect(() => {
-    console.log("fetchedData ", fetchedData)
+    console.log('fetchedData: ', fetchedData)
     if (fetchedData?.data?.["hydra:member"]) {
-      
-      const modifiedData = fetchedData?.data?.["hydra:member"].map((item: BookData) => {
+
+      const modifiedData = fetchedData.data["hydra:member"].map((item) => {
         return {
           ...item,
           id: item["@id"].replace(/^\/admin\//, "/"),
         };
       });
 
-
       setPageState((prevPageState) => {
         return {
           ...prevPageState,
-          total: fetchedData?.data?.["hydra:totalItems"],
+          total: fetchedData.data["hydra:totalItems"],
           data: modifiedData,
         };
       });
     }
   }, [fetchedData]);
 
+  if (isLoading) return <div>Loading...</div>;
 
-  console.log(pageState)
   return (
     <Box>
       <FormikSearchForm />
@@ -143,7 +142,7 @@ export const Books = () => {
           onPaginationModelChange={handlePageState}
           sx={{
             "& .super-app-theme--header": {
-              backgroundColor: "rgba(255, 255, 255, 0.965)",
+              backgroundColor: "rgba(174, 3, 3, 0.965)",
             },
             "& .MuiDataGrid-columnSeparator": {
               display: "none",
