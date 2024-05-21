@@ -5,10 +5,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 
-import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { Drawer } from "../components/Drawer/Drawer";
 import { DrawerHeader } from "../components/DrawerHeader/DrawerHeader";
 import { AppBar } from "../components/AppBar/AppBar";
+import { StyledNavLink } from "../components/NavLink/NavLink";
 
 const menuItems = ["books", "reviews"]
 
@@ -50,23 +51,22 @@ export function LibraryLayout() {
         <DrawerHeader />
         <List>
           {menuItems.map((text, index) => (
-            <NavLink
+            <StyledNavLink
               key={text}
               to={`/${text}`}
-              style={{
-                textDecoration: "none",
-                color: "black",
-              }}
               onClick={() => {
                 setTab(tab === "Books" ? "Reviews" : "Books");
               }}
             >
-              <ListItem disablePadding sx={{ display: "block" }}>
+              <ListItem disablePadding sx={{ display: "block",  }}>
                 <ListItemButton
                   sx={{
                     minHeight: 48,
                     justifyContent: open ? "initial" : "center",
                     px: 2.5,
+                    'a li .MuiListItemButton-root': {
+                      borderLeft: '3px solid red'
+                    }
                   }}
                 >
                   <ListItemIcon
@@ -81,7 +81,7 @@ export function LibraryLayout() {
                   <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
                 </ListItemButton>
               </ListItem>
-            </NavLink>
+            </StyledNavLink>
           ))}
         </List>
       </Drawer>

@@ -15,7 +15,6 @@ import { BookData, DataBooks } from "../../types/types";
 const columns: GridColDef[] = [
   {
     headerName: "Title",
-    headerClassName: "super-app-theme--header",
     field: "title",
     resizable: false,
     sortable: true,
@@ -24,7 +23,6 @@ const columns: GridColDef[] = [
   },
   {
     headerName: "Author",
-    headerClassName: "super-app-theme--header",
     field: "author",
     resizable: false,
     sortable: true,
@@ -33,7 +31,7 @@ const columns: GridColDef[] = [
   },
   {
     headerName: "Rating",
-    headerClassName: "super-app-theme--header",
+
     field: "rating",
     resizable: false,
     sortable: true,
@@ -45,7 +43,6 @@ const columns: GridColDef[] = [
   },
   {
     headerName: "View",
-    headerClassName: "super-app-theme--header",
     renderCell: ({ id }: { id: string | number }) => (
       <NavLink to={`${id}/view`}>
         <Button startIcon={<VisibilityIcon />}>View</Button>
@@ -59,7 +56,6 @@ const columns: GridColDef[] = [
   },
   {
     headerName: "Edit",
-    headerClassName: "super-app-theme--header",
     renderCell: ({ id }: { id: string | number }) => (
       <NavLink to={`${id}/edit`}>
         <Button startIcon={<EditIcon />}>Edit</Button>

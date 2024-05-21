@@ -41,7 +41,7 @@ export const FormikSearchForm = () => {
       <TextField
         id="author"
         name="author"
-        label="Autor"
+        label="Author"
         value={formik.values.author}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}

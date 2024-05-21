@@ -8,7 +8,8 @@ type AxiosMethod = "get" | "post" | "put" | "delete";
 export const useFetch = <T extends BaseEntity>(
   method: AxiosMethod,
   baseUrl: string,
-  params?: string
+  params?: string,
+  parameters?: {mock: string}
 ) => {
   const { token } = useContext<IAuthContext>(AuthContext);
   const [response, setResponse] = useState<Response<T> | null>();
@@ -21,7 +22,9 @@ export const useFetch = <T extends BaseEntity>(
 
     try {
       const dataResponse = await axios[method](`${baseUrl}${params}`, {
+        ...parameters,
         headers: { Authorization: `Bearer ${token}` },
+
       });
       console.log(dataResponse)
       setResponse(dataResponse.data)
