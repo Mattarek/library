@@ -4,22 +4,22 @@ import { useFetch } from "../../../utils/useFetch";
 export const ViewBook = () => {
   const { id } = useParams();
 
-  const { response, error } = useFetch(
+  const { fetchedData, error } = useFetch(
     "get",
     "https://demo.api-platform.com/",
     `admin/books/${id}`
   );
 
-  console.log(response);
+  console.log(fetchedData);
 
   return (
-    response && (
+    fetchedData && (
       <div>
         <p></p>
         <p></p>
-        <p>{response.title}</p>
-        <p>{response.rating}</p>
-        <p>{response.author}</p>
+        <p>{fetchedData?.data?.title}</p>
+        <p>{fetchedData?.data?.rating}</p>
+        <p>{fetchedData?.data?.author}</p>
       </div>
     )
   );

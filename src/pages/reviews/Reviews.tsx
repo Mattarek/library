@@ -85,15 +85,15 @@ export const Reviews = () => {
     pageSize: 5,
   });
 
-  const { response: fetchedData, isLoading } = useFetch(
+  const {  fetchedData, isLoading } = useFetch(
     "get",
     `https://demo.api-platform.com/admin/reviews`,
     `?page=${pageState.page}&itemsPerPage=${pageState.pageSize}`
   );
 
   useEffect(() => {
-    if (!fetchedData?.["hydra:member"]) return;
-    const modifiedData = fetchedData["hydra:member"].map((item) => {
+    if (!fetchedData?.data?.["hydra:member"]) return;
+    const modifiedData = fetchedData?.data?.["hydra:member"].map((item) => {
       return {
         ...item,
         id: item["@id"].replace(/^\/admin\//, "/"),
@@ -103,7 +103,7 @@ export const Reviews = () => {
     setPageState((prevPageState): State<Review> => {
       return {
         ...prevPageState,
-        total: fetchedData["hydra:totalItems"],
+        total: fetchedData?.data?.["hydra:totalItems"],
         data: modifiedData,
       };
     });

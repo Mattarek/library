@@ -13,17 +13,17 @@ export const EditBook = () => {
   const { id } = useParams();
   const handleOpen = () => setIsModalShown(true);
 
-  const { response, error } = useFetch(
+  const { fetchedData, error } = useFetch(
     "get",
     "https://demo.api-platform.com/",
     `admin/books/${id}`
   );
 
   useEffect(() => {
-    if (response) {
-      setBookData(response);
+    if (fetchedData) {
+      setBookData(fetchedData);
     }
-  }, [response, bookData]);
+  }, [fetchedData, bookData]);
 
   if (error) return <p>An error occurred while downloading from the api.</p>;
   return (

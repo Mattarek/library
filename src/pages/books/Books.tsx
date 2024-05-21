@@ -92,25 +92,28 @@ export const Books = () => {
     }));
   };
 
-  const { response: fetchedData, isLoading } = useFetch<BookData>(
+  const { fetchedData, isLoading } = useFetch<BookData>(
     "get",
     `https://demo.api-platform.com/admin/books`,
     `?page=${pageState.page}&itemsPerPage=${pageState.pageSize}`
   );
 
   useEffect(() => {
-    if (fetchedData?.["hydra:member"]) {
-      const modifiedData = fetchedData["hydra:member"].map((item: BookData) => {
+    console.log("fetchedData ", fetchedData)
+    if (fetchedData?.data?.["hydra:member"]) {
+      
+      const modifiedData = fetchedData?.data?.["hydra:member"].map((item: BookData) => {
         return {
           ...item,
           id: item["@id"].replace(/^\/admin\//, "/"),
         };
       });
 
+
       setPageState((prevPageState) => {
         return {
           ...prevPageState,
-          total: fetchedData["hydra:totalItems"],
+          total: fetchedData?.data?.["hydra:totalItems"],
           data: modifiedData,
         };
       });

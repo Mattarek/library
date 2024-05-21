@@ -7,16 +7,16 @@ export const ViewReview = () => {
   const { id } = useParams();
   const [data, setData] = useState()
   
-  const { response, error } = useFetch(
+  const { fetchedData, error } = useFetch(
     "get",
     "https://demo.api-platform.com/",
     `admin/reviews/${id}`
   );
 
   useEffect(() => {
-    setData(response)
+    setData(fetchedData?.data)
     console.log(data)
-  }, [response])
+  }, [fetchedData])
   
   
 

@@ -11,16 +11,25 @@ import { DrawerHeader } from "../components/DrawerHeader/DrawerHeader";
 import { AppBar } from "../components/AppBar/AppBar";
 import { StyledNavLink } from "../components/NavLink/NavLink";
 
-const menuItems = ["books", "reviews"]
+type MenuItem = {
+  item: "books" | "reviews";
+  icon: JSX.Element;
+};
+
+const menuItems:MenuItem[] = [{item: "books", icon: <LibraryBooksIcon />}, {item: "reviews", icon: <ReviewsIcon />}]
 
 export function LibraryLayout() {
   const [open, setOpen] = useState(false);
-  const [tab, setTab] = useState<"Books" | "Reviews">("Books");
-  const {pathname} = useLocation();
+  const { pathname } = useLocation();
   const handleDrawer = () => {
     setOpen(!open);
   };
 
+  const tabs = pathname ? 
+  pathname.slice(1).split('/').shift()?.replace(/^./, char => char.toUpperCase()) 
+    : "";
+  
+  
   return (
     <Box
       sx={{
@@ -43,20 +52,17 @@ export function LibraryLayout() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            {pathname.slice(1).split('/').shift().replace(/^./, char => char.toUpperCase())  }
+            {tabs}
           </Typography>
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open}>
+      <Drawer  variant="permanent" open={open}>
         <DrawerHeader />
         <List>
-          {menuItems.map((text, index) => (
+          {menuItems.map(({item, icon}) => (
             <StyledNavLink
-              key={text}
-              to={`/${text}`}
-              onClick={() => {
-                setTab(tab === "Books" ? "Reviews" : "Books");
-              }}
+              key={item}
+              to={`/${item}`}
             >
               <ListItem disablePadding sx={{ display: "block",  }}>
                 <ListItemButton
@@ -76,9 +82,9 @@ export function LibraryLayout() {
                       justifyContent: "center",
                     }}
                   >
-                    {index % 2 === 0 ? <LibraryBooksIcon /> : <ReviewsIcon />}
+                   {icon}
                   </ListItemIcon>
-                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                  <ListItemText primary={item[0].toUpperCase() + item.slice(1)} sx={{ opacity: open ? 1 : 0 }} />
                 </ListItemButton>
               </ListItem>
             </StyledNavLink>

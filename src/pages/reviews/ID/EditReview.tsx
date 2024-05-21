@@ -5,22 +5,21 @@ import { useFetch } from "../../../utils/useFetch";
 
 export const EditReview = () => {
   const [reviewData, setReviewData] = useState(null);
-  const [starsCount, setStarsCount] = useState();
 
   const { id } = useParams();
 
-  const { response, error } = useFetch(
+  const { fetchedData, error } = useFetch(
     "get",
     "https://demo.api-platform.com/",
     `admin/reviews/${id}`
   );
 
   useEffect(() => {
-    if (response) {
+    if (fetchedData) {
       console.log(reviewData)
-      setReviewData(response);
+      setReviewData(fetchedData?.data);
     }
-  }, [response, starsCount]);
+  }, [fetchedData]);
 
   if (error) return <p>An error occurred while downloading from the api.</p>;
 
