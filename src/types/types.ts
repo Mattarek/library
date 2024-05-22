@@ -9,7 +9,6 @@ export interface HydraSearch {
     required: boolean;
   }[];
 }
-
 export interface HydraView {
   '@id': string;
   '@type': string;
@@ -19,15 +18,13 @@ export interface HydraView {
 }
 
 export interface Response<T> {
-  data: {
-    '@context': string;
-    '@id': string;
-    '@type': string;
-    'hydra:totalItems': number;
-    'hydra:search': HydraSearch;
-    'hydra:view': HydraView;
-    'hydra:member': T[];
-  }
+  '@context': string;
+  '@id': string;
+  '@type': string;
+  'hydra:totalItems': number;
+  'hydra:search': HydraSearch;
+  'hydra:view': HydraView;
+  'hydra:member': T[];
 }
 
 export interface Book {
@@ -61,10 +58,17 @@ export interface Review {
   };
 }
 
-
-export interface UseFetch<T>{
-  isLoading: boolean,
-  error: boolean,
-  fetchedData: Response<T>
+export interface UseFetch<T> {
+  isLoading: boolean;
+  error: boolean;
+  fetchedData: Response<T>;
 }
-export type AxiosMethod = "get" | "post" | "put" | "delete";
+
+export interface ErrorResponse {
+  type: string;
+  title: string;
+  status: number;
+  detail: string;
+}
+
+export type AxiosMethod = 'get' | 'post' | 'put' | 'delete';

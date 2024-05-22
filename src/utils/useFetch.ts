@@ -1,29 +1,31 @@
 import { useState, useContext, useEffect } from "react";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError } from "axios";
 import { AuthContext, IAuthContext } from "react-oauth2-code-pkce";
-import { AxiosMethod, Book, Response } from "../types/types";
+import { AxiosMethod} from "../types/types";
 
 export const useFetch = <T>(
   method: AxiosMethod,
   baseUrl: string,
   params?: string,
-  parameters?: { mock?: string }
+  parameters?: { dataMock?: string }
 ) => {
   const { token } = useContext<IAuthContext>(AuthContext);
-  const [fetchedData, setFetchedData] = useState<AxiosResponse<T>>();
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<AxiosError| null>(null);
+  const [data, setData] = useState<T>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<AxiosError | null>(null);
 
   const fetchData = async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const dataResponse = await axios[method](`${baseUrl}${params}`, {
+      const dataResponse = await axios({
         ...parameters,
+        url: `${baseUrl}${params}`,
+        method,
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setFetchedData(dataResponse);
+      setData(dataResponse.data);
     } catch (error) {
       const err = error as AxiosError;
       setError(err);
@@ -36,5 +38,5 @@ export const useFetch = <T>(
     fetchData();
   }, [method, baseUrl, params]);
 
-  return { fetchedData, isLoading, error };
+  return { data, isLoading, error };
 };
