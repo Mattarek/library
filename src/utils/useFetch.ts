@@ -7,7 +7,7 @@ export const useFetch = <T>(
   method: AxiosMethod,
   baseUrl: string,
   params?: string,
-  parameters?: { dataMock?: string }
+  body?: any
 ) => {
   const { token } = useContext<IAuthContext>(AuthContext);
   const [data, setData] = useState<T>();
@@ -19,10 +19,10 @@ export const useFetch = <T>(
     setError(null);
     try {
       const dataResponse = await axios({
-        ...parameters,
-        url: `${baseUrl}${params}`,
-        method,
         headers: { Authorization: `Bearer ${token}` },
+        url: `${baseUrl}${params}`,
+        data: body,
+        method,
       });
 
       setData(dataResponse.data);
