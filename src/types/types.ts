@@ -3,10 +3,10 @@ export interface HydraSearch {
   'hydra:template': string;
   'hydra:variableRepresentation': string;
   'hydra:mapping': {
-    '@type': string;
-    variable: string;
-    property: string;
-    required: boolean;
+    '@type': string,
+    variable: string,
+    property: string,
+    required: boolean
   }[];
 }
 export interface HydraView {
@@ -38,23 +38,45 @@ export interface Book {
 }
 
 export interface Review {
+  '@context': string;
   '@id': string;
   '@type': string;
   body: string;
   book: {
-    '@id': string;
-    '@type': string[];
-    author: string;
-    title: string;
+    '@id': string,
+    '@type': string[],
+    author: string,
+    title: string
   };
   publishedAt: string;
   rating: number;
   user: {
-    '@id': string;
-    '@type': string;
-    firstName: string;
-    lastName: string;
-    name: string;
+    '@id': string,
+    '@type': string,
+    firstName: string,
+    lastName: string,
+    name: string
+  };
+}
+
+export interface ReviewList {
+  '@id': string;
+  '@type': string;
+  body: string;
+  book: {
+    '@id': string,
+    '@type': string[],
+    author: string,
+    title: string
+  };
+  publishedAt: string;
+  rating: number;
+  user: {
+    '@id': string,
+    '@type': string,
+    firstName: string,
+    lastName: string,
+    name: string
   };
 }
 
@@ -71,4 +93,4 @@ export interface ErrorResponse {
   detail: string;
 }
 
-export type AxiosMethod = 'get' | 'post' | 'put' | 'delete';
+export type AxiosMethod = 'get' | 'post' | 'put' | 'delete'

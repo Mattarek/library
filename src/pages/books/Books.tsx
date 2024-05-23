@@ -1,21 +1,12 @@
-import {
-  useEffect,
-  useState,
-} from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import {
-  Button,
-  Rating,
-} from '@mui/material';
+import { Button, Rating } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { GridColDef } from '@mui/x-data-grid';
 import { DataGrid } from '../../components/DataGrid/DataGrid';
 import { useFetch } from '../../utils/useFetch';
-import {
-  Book,
-  Response,
-} from '../../types/types';
+import { Book, Response } from '../../types/types';
 
 const columns: GridColDef[] = [
   {
@@ -42,30 +33,15 @@ const columns: GridColDef[] = [
     sortable: true,
     minWidth: 150,
     flex: 1,
-    renderCell: ({
-      row,
-    }: {
-      row: Book;
-    }) => (
-      <Rating
-        value={row.rating}
-        readOnly
-      />
+    renderCell: ({ row }: { row: Book }) => (
+      <Rating value={row.rating} readOnly />
     ),
   },
   {
     headerName: 'View',
-    renderCell: ({
-      id,
-    }: {
-      id: string | number;
-    }) => (
+    renderCell: ({ id }: { id: string | number }) => (
       <NavLink to={`${id}/view`}>
-        <Button
-          startIcon={<VisibilityIcon />}
-        >
-          View
-        </Button>
+        <Button startIcon={<VisibilityIcon />}>View</Button>
       </NavLink>
     ),
     resizable: false,
@@ -76,17 +52,9 @@ const columns: GridColDef[] = [
   },
   {
     headerName: 'Edit',
-    renderCell: ({
-      id,
-    }: {
-      id: string | number;
-    }) => (
+    renderCell: ({ id }: { id: string | number }) => (
       <NavLink to={`${id}/edit`}>
-        <Button
-          startIcon={<EditIcon />}
-        >
-          Edit
-        </Button>
+        <Button startIcon={<EditIcon />}>Edit</Button>
       </NavLink>
     ),
     resizable: false,
@@ -98,25 +66,21 @@ const columns: GridColDef[] = [
 ];
 
 export const Books = () => {
-  const [pageState, setPageState] =
-    useState<{
-      isLoading: boolean;
-      data: Book[];
-      total: number;
-      page: number;
-      pageSize: number;
-    }>({
-      isLoading: false,
-      data: [],
-      total: 0,
-      page: 1,
-      pageSize: 5,
-    });
-
-  const handlePageState = (newPage: {
+  const [pageState, setPageState] = useState<{
+    isLoading: boolean;
+    data: Book[];
+    total: number;
     page: number;
     pageSize: number;
-  }) => {
+  }>({
+    isLoading: false,
+    data: [],
+    total: 0,
+    page: 1,
+    pageSize: 5,
+  });
+
+  const handlePageState = (newPage: { page: number; pageSize: number }) => {
     setPageState(prev => ({
       ...prev,
       page: newPage.page + 1,
@@ -124,28 +88,17 @@ export const Books = () => {
     }));
   };
 
-  const { data, isLoading } = useFetch<
-    Response<Book>
-  >(
+  const { data, isLoading } = useFetch<Response<Book>>(
     'get',
     `https://demo.api-platform.com/admin/books`,
     `?page=${pageState.page}&itemsPerPage=${pageState.pageSize}`
   );
 
   useEffect(() => {
-    if (
-      !data?.['hydra:member'] ||
-      !data?.['hydra:totalItems']
-    )
-      return;
-    const modifiedData = data[
-      'hydra:member'
-    ].map(item => ({
+    if (!data?.['hydra:member'] || !data?.['hydra:totalItems']) return;
+    const modifiedData = data['hydra:member'].map(item => ({
       ...item,
-      id: item['@id'].replace(
-        /^\/admin\//,
-        '/'
-      ),
+      id: item['@id'].replace(/^\/admin\//, '/'),
     }));
 
     setPageState(prev => ({
@@ -160,9 +113,7 @@ export const Books = () => {
       columns={columns}
       pageState={pageState}
       loading={isLoading}
-      onPaginationModelChange={
-        handlePageState
-      }
+      onPaginationModelChange={handlePageState}
     />
   );
 };

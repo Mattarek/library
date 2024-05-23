@@ -1,18 +1,21 @@
-import { DataGrid as DataGridMui, DataGridProps } from '@mui/x-data-grid';
-import { Book, Review } from '../../types/types';
-import { Box, Container } from '@mui/material';
+import { DataGrid as DataGridMui, DataGridProps } from '@mui/x-data-grid'
+import { Book, ReviewList } from '../../types/types'
+import { Box, Container } from '@mui/material'
 
 interface Props<T> extends DataGridProps {
   pageState: {
-    isLoading: boolean;
-    data: T[];
-    total: number;
-    page: number;
-    pageSize: number;
+    isLoading: boolean,
+    data: T[],
+    total: number,
+    page: number,
+    pageSize: number
   };
 }
 
-export function DataGrid({ pageState, ...props }: Readonly<Props<Review | Book>>) {
+export function DataGrid({
+  pageState,
+  ...props
+}: Readonly<Props<ReviewList | Book>>) {
   return (
     <Box>
       <Container sx={{ width: '100%' }}>
@@ -27,12 +30,12 @@ export function DataGrid({ pageState, ...props }: Readonly<Props<Review | Book>>
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 5,
-              },
-            },
+                pageSize: 5
+              }
+            }
           }}
         />
       </Container>
     </Box>
-  );
+  )
 }

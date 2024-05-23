@@ -1,20 +1,11 @@
-import {
-  useEffect,
-  useState,
-} from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import {
-  Button,
-  Rating,
-} from '@mui/material';
+import { Button, Rating } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { DataGrid } from '../../components/DataGrid/DataGrid';
 import { useFetch } from '../../utils/useFetch';
-import {
-  Review,
-  Response,
-} from '../../types/types';
+import { ReviewList, Response } from '../../types/types';
 import { GridColDef } from '@mui/x-data-grid';
 
 const columns: GridColDef[] = [
@@ -22,16 +13,14 @@ const columns: GridColDef[] = [
     headerName: 'User',
     field: 'user',
 
-    valueGetter: (_, row) =>
-      row.user.name,
+    valueGetter: (_, row) => row.user.name,
     sortable: true,
     flex: 1,
     minWidth: 150,
   },
   {
     headerName: 'Book',
-    valueGetter: (_, row) =>
-      `${row.book.title} - ${row.book.author}`,
+    valueGetter: (_, row) => `${row.book.title} - ${row.book.author}`,
     field: 'book.author',
     sortable: true,
     flex: 1,
@@ -39,8 +28,7 @@ const columns: GridColDef[] = [
   },
   {
     headerName: 'Published at',
-    valueGetter: (_, row) =>
-      `${row.publishedAt.slice(0, 10)}`,
+    valueGetter: (_, row) => `${row.publishedAt.slice(0, 10)}`,
     field: 'publishedAt',
     flex: 1,
     minWidth: 150,
@@ -48,12 +36,7 @@ const columns: GridColDef[] = [
   },
   {
     headerName: 'Rating',
-    renderCell: ({ row }) => (
-      <Rating
-        value={row.rating}
-        readOnly
-      />
-    ),
+    renderCell: ({ row }) => <Rating value={row.rating} readOnly />,
     sortable: true,
     field: 'rating',
     minWidth: 150,
@@ -61,17 +44,9 @@ const columns: GridColDef[] = [
   },
   {
     headerName: 'View',
-    renderCell: ({
-      id,
-    }: {
-      id: string;
-    }) => (
-      <NavLink to={`${id}/view`}>
-        <Button
-          startIcon={<VisibilityIcon />}
-        >
-          View
-        </Button>
+    renderCell: param => (
+      <NavLink to={`${param.id}/view`}>
+        <Button startIcon={<VisibilityIcon />}>View</Button>
       </NavLink>
     ),
     sortable: false,
@@ -81,17 +56,9 @@ const columns: GridColDef[] = [
   },
   {
     headerName: 'Edit',
-    renderCell: ({
-      id,
-    }: {
-      id: string;
-    }) => (
-      <NavLink to={`${id}/edit`}>
-        <Button
-          startIcon={<EditIcon />}
-        >
-          Edit
-        </Button>
+    renderCell: param => (
+      <NavLink to={`${param.id}/edit`}>
+        <Button startIcon={<EditIcon />}>Edit</Button>
       </NavLink>
     ),
     sortable: false,
@@ -102,44 +69,32 @@ const columns: GridColDef[] = [
 ];
 
 export const Reviews = () => {
-  const [pageState, setPageState] =
-    useState<{
-      isLoading: boolean;
-      data: Review[];
-      total: number;
-      page: number;
-      pageSize: number;
-    }>({
-      isLoading: false,
-      data: [],
-      total: 0,
-      page: 1,
-      pageSize: 5,
-    });
+  const [pageState, setPageState] = useState<{
+    isLoading: boolean;
+    data: ReviewList[];
+    total: number;
+    page: number;
+    pageSize: number;
+  }>({
+    isLoading: false,
+    data: [],
+    total: 0,
+    page: 1,
+    pageSize: 5,
+  });
 
-  const { data, isLoading } = useFetch<
-    Response<Review>
-  >(
+  const { data, isLoading } = useFetch<Response<ReviewList>>(
     'get',
     `https://demo.api-platform.com/admin/reviews`,
     `?page=${pageState.page}&itemsPerPage=${pageState.pageSize}`
   );
 
   useEffect(() => {
-    if (
-      !data?.['hydra:member'] ||
-      !data?.['hydra:totalItems']
-    )
-      return;
-    const modifiedData = data[
-      'hydra:member'
-    ].map(item => {
+    if (!data?.['hydra:member'] || !data?.['hydra:totalItems']) return;
+    const modifiedData = data['hydra:member'].map(item => {
       return {
         ...item,
-        id: item['@id'].replace(
-          /^\/admin\//,
-          '/'
-        ),
+        id: item['@id'].replace(/^\/admin\//, '/'),
       };
     });
 
@@ -152,10 +107,7 @@ export const Reviews = () => {
     });
   }, [data]);
 
-  const handlePageState = (newPage: {
-    page: number;
-    pageSize: number;
-  }) => {
+  const handlePageState = (newPage: { page: number; pageSize: number }) => {
     setPageState(prev => ({
       ...prev,
       page: newPage.page + 1,
@@ -168,9 +120,7 @@ export const Reviews = () => {
       columns={columns}
       pageState={pageState}
       loading={isLoading}
-      onPaginationModelChange={
-        handlePageState
-      }
+      onPaginationModelChange={handlePageState}
     />
   );
 };
