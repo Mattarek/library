@@ -1,22 +1,29 @@
-import { useParams } from 'react-router-dom'
-import { useFetch } from '../../../utils/useFetch'
-import { useEffect, useState } from 'react'
-import { Button } from '@mui/material'
+import {useParams} from 'react-router-dom'
+import {useFetch} from '../../../utils/useFetch'
+import {useEffect, useState} from 'react'
+import {Button} from '@mui/material'
 
-import { Modal } from '../../../components/Modal/Modal'
+import {Modal} from '../../../components/Modal/Modal'
 import DeleteIcon from '@mui/icons-material/Delete'
+import {Book} from '../../../types/types'
 
 export const EditBook = () => {
-  const [bookData, setBookData] = useState({})
+  const [bookData, setBookData] = useState<{title: string; author: string; condition: string}>({
+    title: '',
+    author: '',
+    condition: ''
+  })
+
   const [isModalShown, setIsModalShown] = useState(false)
 
-  const { id } = useParams()
+  const {id} = useParams()
   const handleOpen = () => setIsModalShown(true)
 
-  const { data, error } = useFetch('get', 'https://demo.api-platform.com/', `admin/books/${id}`)
+  const {data, error} = useFetch<Book>('get', 'https://demo.api-platform.com/', `admin/books/${id}`)
 
   useEffect(() => {
     if (data) {
+      console.log(data)
       setBookData(data)
     }
   }, [data])
@@ -24,10 +31,9 @@ export const EditBook = () => {
   if (error) return <p>An error occurred while downloading from the api.</p>
   return (
     <>
-      {bookData && (
+      {data && (
         <>
-          <div>{bookData}</div>
-
+          {bookData.condition}
           <Button onClick={handleOpen}>
             <DeleteIcon />
             Delete
