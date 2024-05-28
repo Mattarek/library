@@ -1,12 +1,13 @@
 import {useEffect, useState} from 'react'
 import {NavLink} from 'react-router-dom'
-import {Button, Rating} from '@mui/material'
+import {Box, Button, Rating, TextField} from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import {GridColDef} from '@mui/x-data-grid'
 import {DataGrid} from '../../components/DataGrid/DataGrid'
 import {useFetch} from '../../utils/useFetch'
 import {Book, Response} from '../../types/types'
+import {Field, Form, Formik} from 'formik'
 
 const columns: GridColDef[] = [
   {
@@ -27,7 +28,6 @@ const columns: GridColDef[] = [
   },
   {
     headerName: 'Rating',
-
     field: 'rating',
     resizable: false,
     sortable: true,
@@ -78,18 +78,39 @@ export const Books = () => {
     pageSize: 5
   })
 
+  const [searchParams, setSearchParams] = useState(
+    `?page=${pageState.page}&itemsPerPage=${pageState.pageSize}`
+  )
+
   const handlePageState = (newPage: {page: number; pageSize: number}) => {
     setPageState(prev => ({
       ...prev,
       page: newPage.page + 1,
       pageSize: newPage.pageSize
     }))
+    setSearchParams(`?page=${newPage.page + 1}&itemsPerPage=${newPage.pageSize}`)
+  }
+
+  const handleSubmit = (values: {author: string; title: string; condition: string}) => {
+    let query = ''
+    const {author, title, condition} = values
+
+    if (author) query += `?author=${author}`
+    if (title) query += author ? `&title=${title}` : `?title=${title}`
+    if (condition) query += author || title ? `&condition=${condition}` : `?condition=${condition}`
+    if (!author && !title && !condition)
+      query = `?page=${pageState.page}&itemsPerPage=${pageState.pageSize}`
+    setPageState(prev => ({
+      ...prev,
+      page: 1
+    }))
+    setSearchParams(query)
   }
 
   const {data, isLoading} = useFetch<Response<Book>>(
     'get',
     `https://demo.api-platform.com/admin/books`,
-    `?page=${pageState.page}&itemsPerPage=${pageState.pageSize}`
+    searchParams
   )
 
   useEffect(() => {
@@ -107,13 +128,33 @@ export const Books = () => {
   }, [data])
 
   return (
-    <DataGrid
-      columns={columns}
-      pageState={pageState}
-      loading={isLoading}
-      onPaginationModelChange={handlePageState}
-    />
+    <>
+      <Formik initialValues={{author: '', title: '', condition: ''}} onSubmit={handleSubmit}>
+        <Form>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center'
+            }}
+          >
+            <Field as={TextField} id="title" name="title" placeholder="Title" />
+            <Field as={TextField} id="author" name="author" placeholder="Author" />
+            <Field as={TextField} id="condition" name="condition" placeholder="Condition" />
+          </Box>
+          <Box sx={{display: 'flex', justifyContent: 'center'}}>
+            <Button variant="contained" type="submit">
+              Search
+            </Button>
+          </Box>
+        </Form>
+      </Formik>
+      <DataGrid
+        columns={columns}
+        pageState={pageState}
+        loading={isLoading}
+        onPaginationModelChange={handlePageState}
+      />
+    </>
   )
 }
-
-// covers, tablica z obrazkami, link  do dostosowania: https://covers.openlibrary.org/b/id/4066031-L.jpg

@@ -80,13 +80,6 @@ export interface ReviewList {
   }
 }
 
-export interface OpenLibraryResponse {
-  publish_date: string
-  title: string
-  author: string
-  covers: number[]
-}
-
 export interface UseFetch<T> {
   isLoading: boolean
   error: boolean

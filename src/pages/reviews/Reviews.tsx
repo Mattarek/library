@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { Button, Rating } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import { DataGrid } from '../../components/DataGrid/DataGrid';
-import { useFetch } from '../../utils/useFetch';
-import { ReviewList, Response } from '../../types/types';
-import { GridColDef } from '@mui/x-data-grid';
+import {useEffect, useState} from 'react'
+import {NavLink} from 'react-router-dom'
+import {Button, Rating} from '@mui/material'
+import EditIcon from '@mui/icons-material/Edit'
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import {DataGrid} from '../../components/DataGrid/DataGrid'
+import {useFetch} from '../../utils/useFetch'
+import {ReviewList, Response} from '../../types/types'
+import {GridColDef} from '@mui/x-data-grid'
 
 const columns: GridColDef[] = [
   {
@@ -16,7 +16,7 @@ const columns: GridColDef[] = [
     valueGetter: (_, row) => row.user.name,
     sortable: true,
     flex: 1,
-    minWidth: 150,
+    minWidth: 150
   },
   {
     headerName: 'Book',
@@ -24,7 +24,7 @@ const columns: GridColDef[] = [
     field: 'book.author',
     sortable: true,
     flex: 1,
-    minWidth: 150,
+    minWidth: 250
   },
   {
     headerName: 'Published at',
@@ -32,15 +32,15 @@ const columns: GridColDef[] = [
     field: 'publishedAt',
     flex: 1,
     minWidth: 150,
-    sortable: true,
+    sortable: true
   },
   {
     headerName: 'Rating',
-    renderCell: ({ row }) => <Rating value={row.rating} readOnly />,
+    renderCell: ({row}) => <Rating value={row.rating} readOnly />,
     sortable: true,
     field: 'rating',
     minWidth: 150,
-    flex: 1,
+    flex: 1
   },
   {
     headerName: 'View',
@@ -52,7 +52,7 @@ const columns: GridColDef[] = [
     sortable: false,
     field: 'view',
     minWidth: 150,
-    flex: 1,
+    flex: 1
   },
   {
     headerName: 'Edit',
@@ -64,56 +64,56 @@ const columns: GridColDef[] = [
     sortable: false,
     field: 'edit',
     minWidth: 150,
-    flex: 1,
-  },
-];
+    flex: 1
+  }
+]
 
 export const Reviews = () => {
   const [pageState, setPageState] = useState<{
-    isLoading: boolean;
-    data: ReviewList[];
-    total: number;
-    page: number;
-    pageSize: number;
+    isLoading: boolean
+    data: ReviewList[]
+    total: number
+    page: number
+    pageSize: number
   }>({
     isLoading: false,
     data: [],
     total: 0,
     page: 1,
-    pageSize: 5,
-  });
+    pageSize: 5
+  })
 
-  const { data, isLoading } = useFetch<Response<ReviewList>>(
+  const {data, isLoading} = useFetch<Response<ReviewList>>(
     'get',
     `https://demo.api-platform.com/admin/reviews`,
     `?page=${pageState.page}&itemsPerPage=${pageState.pageSize}`
-  );
+  )
 
   useEffect(() => {
-    if (!data?.['hydra:member'] || !data?.['hydra:totalItems']) return;
+    if (!data?.['hydra:member'] || !data?.['hydra:totalItems']) return
     const modifiedData = data['hydra:member'].map(item => {
       return {
         ...item,
-        id: item['@id'].replace(/^\/admin\//, '/'),
-      };
-    });
+        id: item['@id'].replace(/^\/admin\//, '/')
+      }
+    })
 
     setPageState(prev => {
       return {
         ...prev,
         total: data['hydra:totalItems'],
-        data: modifiedData,
-      };
-    });
-  }, [data]);
+        data: modifiedData
+      }
+    })
+  }, [data])
 
-  const handlePageState = (newPage: { page: number; pageSize: number }) => {
+  const handlePageState = (newPage: {page: number; pageSize: number}) => {
     setPageState(prev => ({
       ...prev,
       page: newPage.page + 1,
-      pageSize: newPage.pageSize,
-    }));
-  };
+      pageSize: newPage.pageSize
+    }))
+  }
 
   return (
     <DataGrid
@@ -122,5 +122,5 @@ export const Reviews = () => {
       loading={isLoading}
       onPaginationModelChange={handlePageState}
     />
-  );
-};
+  )
+}

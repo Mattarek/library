@@ -1,71 +1,68 @@
-import { useFormik } from "formik";
+import React, {useState, useContext} from 'react'
+import {Formik, Field, Form} from 'formik'
+import axios from 'axios'
+import {AuthContext, IAuthContext} from 'react-oauth2-code-pkce'
 
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
+interface FormValues {
+  author?: string
+  title?: string
+  condition?: string
+  onDataChange: (data: Book[]) => void // Dodajemy funkcję onDataChange, która przyjmuje dane książek
+}
 
-const initialValues = {
-  title: "",
-  author: "",
-  datePub: "",
-};
+const FormikForms: React.FC<FormValues> = ({onDataChange}) => {
+  const {token} = useContext<IAuthContext>(AuthContext)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
 
-const onSubmit = () => {};
+  const handleSubmit = async (values: FormValues) => {
+    const params = new URLSearchParams()
+    if (values.author) params.append('author', values.author)
+    if (values.title) params.append('title', values.title)
+    if (values.condition) params.append('condition', values.condition)
 
-export const FormikSearchForm = () => {
-  const formik = useFormik({
-    initialValues: initialValues,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-    },
-  });
+    const queryString = `?${params.toString()}`
+    const url = `https://demo.api-platform.com/admin/books/${queryString}`
+
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      onDataChange(response.data['hydra:member']) // Przekazujemy dane książek do funkcji onDataChange
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
-    <form
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        width: "100%",
-      }}
-      onSubmit={formik.handleSubmit}
-    >
-      <TextField
-        id="title"
-        name="title"
-        label="Tytuł"
-        value={formik.values.title}
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        error={formik.touched.title && Boolean(formik.errors.title)}
-        helperText={formik.touched.title && formik.errors.title}
-      />
-      <TextField
-        id="author"
-        name="author"
-        label="Author"
-        value={formik.values.author}
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        error={formik.touched.author && Boolean(formik.errors.author)}
-        helperText={formik.touched.author && formik.errors.author}
-      />
-      <TextField
-        id="datePub"
-        name="datePub"
-        label="Data publikacji"
-        value={formik.values.datePub}
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        error={formik.touched.datePub && Boolean(formik.errors.datePub)}
-        helperText={formik.touched.datePub && formik.errors.datePub}
-      />
+    <div>
+      <h1>Book Search</h1>
+      <Formik initialValues={{author: '', title: '', condition: ''}} onSubmit={handleSubmit}>
+        <Form>
+          <div>
+            <label htmlFor="author">Author:</label>
+            <Field id="author" name="author" placeholder="Search by Author" />
+          </div>
+          <div>
+            <label htmlFor="title">Title:</label>
+            <Field id="title" name="title" placeholder="Search by Title" />
+          </div>
+          <div>
+            <label htmlFor="condition">Condition:</label>
+            <Field id="condition" name="condition" placeholder="Search by Condition" />
+          </div>
+          <button type="submit">Search</button>
+        </Form>
+      </Formik>
+    </div>
+  )
+}
 
-      <Button
-        color="primary"
-        variant="contained"
-        onClick={onSubmit}
-      >
-        Submit
-      </Button>
-    </form>
-  );
-};
+export default FormikForms

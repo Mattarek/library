@@ -18,7 +18,6 @@ export const ViewReview = () => {
 
   const {data} = useFetch<Review>('get', 'https://demo.api-platform.com/', `admin/reviews/${id}`)
 
-  console.log(data)
   useEffect(() => {
     if (!data) return
     setDataReview(data)
