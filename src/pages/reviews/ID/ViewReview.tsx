@@ -31,9 +31,10 @@ export const ViewReview = () => {
             Author: {dataReview?.user.name}
           </Typography>
           <Typography paragraph gutterBottom>
-            Book:{' '}
+            Book:
             {dataReview?.book['@id'] && (
               <Link
+                style={{textDecoration: 'none', color: 'rgb(15 146 154)'}}
                 to={`${dataReview?.book['@id'].replace(/^\/admin\//, '/')}/view`}
               >{`${dataReview?.book?.title} - ${dataReview?.book?.author}`}</Link>
             )}

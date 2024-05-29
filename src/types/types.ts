@@ -94,3 +94,15 @@ export interface ErrorResponse {
 }
 
 export type AxiosMethod = 'get' | 'post' | 'put' | 'delete'
+
+export interface BookCover {
+  covers: number[]
+  title: string
+  description: {
+    value: string
+  }
+  full_title: string
+  publish_date: string
+  works: {key: string}[]
+  number_of_pages: number
+}
