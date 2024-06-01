@@ -7,6 +7,7 @@ import {DataGrid} from '../../components/DataGrid/DataGrid'
 import {useFetch} from '../../utils/useFetch'
 import {ReviewList, Response} from '../../types/types'
 import {GridColDef} from '@mui/x-data-grid'
+import {FormikForms} from '../../components/Form/Form'
 
 const columns: GridColDef[] = [
   {
@@ -83,6 +84,8 @@ export const Reviews = () => {
     pageSize: 5
   })
 
+  const handleSubmit = (values: {author: string; title: string; condition: string}) => {}
+
   const {data, isLoading} = useFetch<Response<ReviewList>>(
     'get',
     `https://demo.api-platform.com/admin/reviews`,
@@ -116,11 +119,14 @@ export const Reviews = () => {
   }
 
   return (
-    <DataGrid
-      columns={columns}
-      pageState={pageState}
-      loading={isLoading}
-      onPaginationModelChange={handlePageState}
-    />
+    <>
+      <FormikForms handleSubmit={handleSubmit} />
+      <DataGrid
+        columns={columns}
+        pageState={pageState}
+        loading={isLoading}
+        onPaginationModelChange={handlePageState}
+      />
+    </>
   )
 }

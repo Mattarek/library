@@ -8,6 +8,7 @@ import {DataGrid} from '../../components/DataGrid/DataGrid'
 import {useFetch} from '../../utils/useFetch'
 import {Book, Response} from '../../types/types'
 import {Field, Form, Formik} from 'formik'
+import {FormikForms} from '../../components/Form/Form'
 
 const columns: GridColDef[] = [
   {
@@ -129,26 +130,7 @@ export const Books = () => {
 
   return (
     <>
-      <Formik initialValues={{author: '', title: '', condition: ''}} onSubmit={handleSubmit}>
-        <Form>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center'
-            }}
-          >
-            <Field as={TextField} id="title" name="title" placeholder="Title" />
-            <Field as={TextField} id="author" name="author" placeholder="Author" />
-            <Field as={TextField} id="condition" name="condition" placeholder="Condition" />
-          </Box>
-          <Box sx={{display: 'flex', justifyContent: 'center'}}>
-            <Button variant="contained" type="submit">
-              Search
-            </Button>
-          </Box>
-        </Form>
-      </Formik>
+      <FormikForms handleSubmit={handleSubmit} />
       <DataGrid
         columns={columns}
         pageState={pageState}

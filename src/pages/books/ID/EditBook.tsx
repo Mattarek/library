@@ -33,6 +33,8 @@ export const EditBook = () => {
     <>
       {data && (
         <>
+          {bookData.title} - {bookData.author}
+          <br />
           {bookData.condition}
           <Button onClick={handleOpen}>
             <DeleteIcon />

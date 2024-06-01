@@ -2,6 +2,7 @@ import {Box, Rating} from '@mui/material'
 import {useEffect, useState} from 'react'
 import {Description} from '../Description/Description'
 import {BookCover} from '../../types/types'
+import {Comments} from '../Comments/Comments'
 
 interface Props {
   data: {
@@ -13,7 +14,6 @@ interface Props {
 
 export const Cover = ({data}: Props) => {
   const [bookCover, setBookCover] = useState<BookCover>()
-  console.log(bookCover)
   useEffect(() => {
     data?.book &&
       fetch(data.book)
@@ -38,12 +38,15 @@ export const Cover = ({data}: Props) => {
         )}
       </Box>
       <Box sx={{marginLeft: '30px'}}>
-        <Box>Tytuł: {data?.title ? data?.title : bookCover?.full_title}</Box>
-        <Box>Rok publikacji: {bookCover?.publish_date}</Box>
-        <Box>Ilość stron: {bookCover?.number_of_pages}</Box>
-        <Rating value={data?.rating} readOnly />
-        {bookCover && <Description book={bookCover} />}
+        {data?.title ? <Box>Tytuł: {data?.title ? data?.title : bookCover?.full_title}</Box> : null}
+        {bookCover?.publish_date ? <Box>Rok publikacji: {bookCover?.publish_date}</Box> : null}
+        {bookCover?.number_of_pages ? <Box>Ilość stron: {bookCover?.number_of_pages}</Box> : null}
+        {data?.rating ? <Rating value={data?.rating} readOnly /> : null}
+        <br />
+        {bookCover ? <Description book={bookCover} /> : null}
       </Box>
+      <br />
+      {/* <Comments /> */}
     </Box>
   )
 }
