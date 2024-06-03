@@ -8,7 +8,6 @@ export const ViewBook = () => {
   const {id} = useParams()
   const {data, error} = useFetch<Book>('get', 'https://demo.api-platform.com/', `admin/books/${id}`)
 
-  console.log(data)
   if (error) return <div>{error.message}</div>
   return (
     data && (

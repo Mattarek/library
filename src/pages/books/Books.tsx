@@ -1,13 +1,12 @@
 import {useEffect, useState} from 'react'
 import {NavLink} from 'react-router-dom'
-import {Box, Button, Rating, TextField} from '@mui/material'
+import {Button, Rating} from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import {GridColDef} from '@mui/x-data-grid'
 import {DataGrid} from '../../components/DataGrid/DataGrid'
 import {useFetch} from '../../utils/useFetch'
 import {Book, Response} from '../../types/types'
-import {Field, Form, Formik} from 'formik'
 import {FormikForms} from '../../components/Form/Form'
 
 const columns: GridColDef[] = [
@@ -22,6 +21,14 @@ const columns: GridColDef[] = [
   {
     headerName: 'Author',
     field: 'author',
+    resizable: false,
+    sortable: true,
+    minWidth: 150,
+    flex: 1
+  },
+  {
+    headerName: 'Data publikacji',
+    field: 'publishDate',
     resizable: false,
     sortable: true,
     minWidth: 150,
@@ -64,6 +71,22 @@ const columns: GridColDef[] = [
   }
 ]
 
+function parseDate(dateString: string): string {
+  let date: Date
+
+  if (/^\d{4}$/.test(dateString)) {
+    date = new Date(parseInt(dateString), 0, 1)
+  } else if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+    date = new Date(dateString)
+  } else if (/^[a-zA-Z]+\s\d{4}$/.test(dateString)) {
+    date = new Date(dateString)
+  } else {
+    throw new Error('Nieznany format daty: ' + dateString)
+  }
+
+  return date.toISOString().split('T')[0]
+}
+
 export const Books = () => {
   const [pageState, setPageState] = useState<{
     isLoading: boolean
@@ -72,7 +95,7 @@ export const Books = () => {
     page: number
     pageSize: number
   }>({
-    isLoading: false,
+    isLoading: true,
     data: [],
     total: 0,
     page: 1,
@@ -108,24 +131,43 @@ export const Books = () => {
     setSearchParams(query)
   }
 
-  const {data, isLoading} = useFetch<Response<Book>>(
+  const {data} = useFetch<Response<Book>>(
     'get',
     `https://demo.api-platform.com/admin/books`,
     searchParams
   )
 
   useEffect(() => {
+    setPageState(p => ({...p, isLoading: true}))
     if (!data?.['hydra:member'] || !data?.['hydra:totalItems']) return
-    const modifiedData = data['hydra:member'].map(item => ({
-      ...item,
-      id: item['@id'].replace(/^\/admin\//, '/')
-    }))
+    const fetchAndModifyData = async () => {
+      const modifiedData = await Promise.all(
+        data['hydra:member'].map(async item => {
+          try {
+            const response = await fetch(item.book)
+            const pubJSON = await response.json()
+            const date = parseDate(pubJSON.publish_date)
 
-    setPageState(prev => ({
-      ...prev,
-      total: data['hydra:totalItems'],
-      data: modifiedData
-    }))
+            return {
+              ...item,
+              publishDate: date
+            }
+          } catch (error) {
+            console.error('Error fetching data:', error)
+            return item
+          }
+        })
+      )
+
+      setPageState(prev => ({
+        ...prev,
+        isLoading: false,
+        total: data['hydra:totalItems'],
+        data: modifiedData
+      }))
+    }
+
+    fetchAndModifyData()
   }, [data])
 
   return (
@@ -134,7 +176,7 @@ export const Books = () => {
       <DataGrid
         columns={columns}
         pageState={pageState}
-        loading={isLoading}
+        loading={pageState.isLoading}
         onPaginationModelChange={handlePageState}
       />
     </>

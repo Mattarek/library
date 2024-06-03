@@ -23,7 +23,6 @@ export const EditBook = () => {
 
   useEffect(() => {
     if (data) {
-      console.log(data)
       setBookData(data)
     }
   }, [data])

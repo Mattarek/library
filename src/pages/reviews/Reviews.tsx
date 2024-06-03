@@ -94,18 +94,13 @@ export const Reviews = () => {
 
   useEffect(() => {
     if (!data?.['hydra:member'] || !data?.['hydra:totalItems']) return
-    const modifiedData = data['hydra:member'].map(item => {
-      return {
-        ...item,
-        id: item['@id'].replace(/^\/admin\//, '/')
-      }
-    })
 
     setPageState(prev => {
       return {
         ...prev,
         total: data['hydra:totalItems'],
-        data: modifiedData
+        data: data['hydra:member'],
+        isLoading: false
       }
     })
   }, [data])
@@ -114,7 +109,8 @@ export const Reviews = () => {
     setPageState(prev => ({
       ...prev,
       page: newPage.page + 1,
-      pageSize: newPage.pageSize
+      pageSize: newPage.pageSize,
+      isLoading: false
     }))
   }
 
