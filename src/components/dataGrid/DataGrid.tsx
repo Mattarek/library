@@ -17,8 +17,7 @@ export function DataGrid({pageState, ...props}: Readonly<Props<ReviewList | Book
     <Box>
       <Container sx={{width: '100%'}}>
         <DataGridMui
-          {...props}
-          getRowId={row => row['@id'].replace(/^\/admin\//, '/')} //
+          getRowId={row => row['@id'].replace(/^\/admin\//, '/')}
           rows={pageState.data}
           rowCount={pageState.total}
           autoHeight
@@ -32,6 +31,7 @@ export function DataGrid({pageState, ...props}: Readonly<Props<ReviewList | Book
               }
             }
           }}
+          {...props}
         />
       </Container>
     </Box>

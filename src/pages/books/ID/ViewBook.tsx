@@ -9,6 +9,7 @@ export const ViewBook = () => {
   const {data, error} = useFetch<Book>('get', 'https://demo.api-platform.com/', `admin/books/${id}`)
 
   if (error) return <div>{error.message}</div>
+
   return (
     data && (
       <>
