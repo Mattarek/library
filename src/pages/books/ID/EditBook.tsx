@@ -1,16 +1,18 @@
 import {useParams} from 'react-router-dom'
 import {useFetch} from '../../../utils/useFetch'
-import {useEffect, useState} from 'react'
-import {Button, MenuItem, Select, TextField} from '@mui/material'
-
+import {useContext, useEffect, useState} from 'react'
+import {Button, MenuItem, Select, SelectChangeEvent, TextField} from '@mui/material'
 import {Modal} from '../../../components/Modal/Modal'
-import DeleteIcon from '@mui/icons-material/Delete'
 import {Book} from '../../../types/types'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
+import axios from 'axios'
+import {AuthContext, IAuthContext} from 'react-oauth2-code-pkce'
 
 export const EditBook = () => {
-  const [bookData, setBookData] = useState<{title: string; author: string; condition: string}>({
-    title: '',
-    author: '',
+  const {token} = useContext<IAuthContext>(AuthContext)
+  const [bookData, setBookData] = useState<{book: string; condition: string}>({
+    book: '',
     condition: 'New'
   })
   const [isModalShown, setIsModalShown] = useState(false)
@@ -18,20 +20,14 @@ export const EditBook = () => {
   const handleOpen = () => setIsModalShown(true)
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target
+    console.log(name, value)
     setBookData(prevData => ({...prevData, [name]: value}))
   }
-
-  const handleSelectChange = e => {
-    console.log(e.target.value)
-    setBookData(p => ({...p, condition: e.target.value as string}))
-  }
-
   const {data, error} = useFetch<Book>('get', 'https://demo.api-platform.com/', `admin/books/${id}`)
 
   useEffect(() => {
     if (!data) return
     let condition = ''
-
     switch (data.condition) {
       case 'https://schema.org/UsedCondition':
         condition = 'Used'
@@ -49,25 +45,36 @@ export const EditBook = () => {
         condition = 'Unknown'
     }
 
-    setBookData(p => ({
-      title: data.title,
-      author: data.author,
-      condition: condition
+    setBookData(_ => ({
+      book: `${data.title} - ${data.author}`,
+      condition
     }))
   }, [data])
-  console.log(data)
+
+  const handleSelectChange = (e: SelectChangeEvent) => {
+    setBookData(p => ({...p, condition: e.target.value}))
+  }
+
+  const handleEditData = async () => {
+    try {
+      const response = await axios({
+        method: 'PUT',
+        headers: {Authorization: `Bearer ${token}`},
+        url: `https://demo.api-platform.com/admin/books/${id}`,
+        data: bookData
+      })
+      console.log(response)
+    } catch (error) {
+      console.error('Błąd przy aktualizacji danych:', error)
+    }
+  }
 
   if (error) return <p>An error occurred while downloading from the api.</p>
   return (
     <>
       {data && (
-        <>
-          <TextField
-            name="title"
-            value={`${bookData.title} - ${bookData.author}`}
-            onChange={handleInputChange}
-            label="Title"
-          />
+        <form>
+          <TextField name="book" value={bookData.book} onChange={handleInputChange} label="Title" />
           <br />
           <Select value={bookData.condition} onChange={handleSelectChange}>
             <MenuItem value="New">New</MenuItem>
@@ -75,12 +82,17 @@ export const EditBook = () => {
             <MenuItem value="Used">Used</MenuItem>
             <MenuItem value="Damaged">Damaged</MenuItem>
           </Select>
+          <br />
+          <Button onClick={handleEditData}>
+            <EditIcon />
+            Edit
+          </Button>
           <Button onClick={handleOpen}>
             <DeleteIcon />
             Delete
           </Button>
           <Modal state={isModalShown} setOpen={setIsModalShown} />
-        </>
+        </form>
       )}
     </>
   )

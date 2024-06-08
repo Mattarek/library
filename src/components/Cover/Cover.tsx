@@ -1,6 +1,5 @@
 import {Box, Rating, Typography} from '@mui/material'
 import {useEffect, useState} from 'react'
-import {Description} from '../Description/Description'
 import {BookCover} from '../../types/types'
 
 interface Props {
